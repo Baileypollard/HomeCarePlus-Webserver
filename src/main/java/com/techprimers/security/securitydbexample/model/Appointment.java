@@ -1,11 +1,6 @@
 package com.techprimers.security.securitydbexample.model;
 
-import java.util.Objects;
-import java.util.UUID;
-
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
+import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
 
 import com.couchbase.client.java.repository.annotation.Id;
@@ -203,41 +198,8 @@ public class Appointment
         this.employee_id = employee_id;
     }
 
-
-//    public String getId()
-//    {
-//        return id;
-//    }
-//
-//    public void setId(String id)
-//    {
-//        this.id = id;
-//    }
-//
-//    @Override
-//    public int hashCode()
-//    {
-//        int hash = 7;
-//        hash = 37 * hash + Objects.hashCode(this.id);
-//        return hash;
-//    }
-
-//    @Override
-//    public boolean equals(Object obj)
-//    {
-//        if (this == obj)
-//        {
-//            return true;
-//        }
-//        if (obj == null)
-//        {
-//            return false;
-//        }
-//        if (getClass() != obj.getClass())
-//        {
-//            return false;
-//        }
-//        final Appointment other = (Appointment) obj;
-//        return Objects.equals(this.id, other.id);
-//    }
+    public String getKey()
+    {
+        return getEmployee_id() + "." + getDate();
+    }
 }

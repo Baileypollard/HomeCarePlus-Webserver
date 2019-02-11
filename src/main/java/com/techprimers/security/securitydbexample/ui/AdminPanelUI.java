@@ -2,6 +2,7 @@ package com.techprimers.security.securitydbexample.ui;
 
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
+import com.techprimers.security.securitydbexample.repository.ClientRepository;
 import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -9,10 +10,11 @@ import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import com.vaadin.ui.renderers.ComponentRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
+import views.CreateAppointmentWindow;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -20,13 +22,19 @@ import java.util.Set;
 @SpringUI(path = "/admin/panel")
 @Title("Admin Panel")
 @Theme("valo")
-public class AdminPanelUIView extends UI
+public class AdminPanelUI extends UI
 {
     private VerticalLayout root;
     private Grid<Appointment> appointmentGrid;
 
     @Autowired
-    AppointmentRepository appointmentRepository;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     protected void init(VaadinRequest vaadinRequest)
@@ -40,7 +48,16 @@ public class AdminPanelUIView extends UI
         HorizontalLayout buttonLayout = new HorizontalLayout();
 
         Button newAppointmentButton = new Button("New Appointment", VaadinIcons.PLUS_CIRCLE);
-        newAppointmentButton.addClickListener(clickEvent -> getPage().setLocation("/admin/new-appointment"));
+        newAppointmentButton.addClickListener(clickEvent ->
+                {
+                    Collection<Window> windows = getWindows();
+                    if (getWindows().size() > 0)
+                    {
+                        windows.forEach(Window::close);
+                    }
+                    addWindow(new CreateAppointmentWindow(employeeRepository, clientRepository, appointmentRepository));
+                }
+        );
         newAppointmentButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         Button deleteButton = new Button("Delete", VaadinIcons.CLOSE);
@@ -75,7 +92,7 @@ public class AdminPanelUIView extends UI
         root.addComponents(buttonLayout, appointmentGrid);
         root.setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);
         root.setExpandRatio(appointmentGrid, 1.0f);
-
-
     }
+
+
 }

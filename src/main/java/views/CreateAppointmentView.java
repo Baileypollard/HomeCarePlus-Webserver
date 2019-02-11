@@ -1,0 +1,81 @@
+package views;
+
+import com.techprimers.security.securitydbexample.model.Appointment;
+import com.techprimers.security.securitydbexample.model.Client;
+import com.techprimers.security.securitydbexample.model.Employee;
+import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
+import com.techprimers.security.securitydbexample.repository.ClientRepository;
+import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+
+import java.util.UUID;
+
+public class CreateAppointmentView extends VerticalLayout
+{
+    private ComboBox<Client> clientsCB;
+    private ComboBox<Employee> employeesCB;
+    private TextField startTime;
+    private TextField endTime;
+    private DateField dateField;
+
+    public CreateAppointmentView(EmployeeRepository employeeRepository, ClientRepository clientRepository, AppointmentRepository appointmentRepository)
+    {
+        setWidth("100%");
+        setHeight("100%");
+        setSpacing(true);
+
+        FormLayout layout = new FormLayout();
+        clientsCB = new ComboBox<>("Client: ");
+        employeesCB = new ComboBox<>("Employee: ");
+
+        employeesCB.setItems(employeeRepository.findAll());
+        employeesCB.setEmptySelectionAllowed(false);
+
+        clientsCB.setItems(clientRepository.findAll());
+        clientsCB.setEmptySelectionAllowed(false);
+
+        dateField = new DateField("Date: ");
+        dateField.setWidth("-1px");
+        dateField.setDateFormat("yyyy-MM-dd");
+
+        startTime = new TextField("Start Time: ");
+        endTime = new TextField("End Time: ");
+
+        Button createButton = new Button("Create Appointment");
+        createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+
+
+        createButton.addClickListener(clickEvent -> {
+                    Appointment appointment = createNewAppointment();
+                    appointmentRepository.createAppointment(appointment.getKey(), appointment.getEmployee_id(), appointment.getDate(),
+                            appointment.getFirst_name(), appointment.getLast_name(), appointment.getAddress(), appointment.getStart_time(),
+                            appointment.getEnd_time(), appointment.getAppointment_id(), appointment.getGender(), appointment.getStatus());
+                });
+
+        layout.addComponents(clientsCB, employeesCB, dateField, startTime, endTime, createButton);
+        addComponent(layout);
+
+        setComponentAlignment(layout, Alignment.TOP_CENTER);
+    }
+
+    private Appointment createNewAppointment()
+    {
+        Client selectedClient = clientsCB.getSelectedItem().get();
+        Employee selectedEmployee = employeesCB.getSelectedItem().get();
+
+        String firstName = selectedClient.getFirst_name();
+        String lastName = selectedClient.getLast_name();
+        String address = selectedClient.getAddress();
+        String startTime = this.startTime.getValue();
+        String endTime = this.startTime.getValue();
+        String date = dateField.getValue().toString();
+        String gender = selectedClient.getGender();
+        String phoneNumber = selectedClient.getPhone_number();
+        String employeeId = selectedEmployee.getEmployee_id();
+
+        return new Appointment(firstName, UUID.randomUUID().toString(), address, "", endTime, startTime, gender,
+                lastName, phoneNumber, "", "", "NEW", date, employeeId);
+
+    }
+}

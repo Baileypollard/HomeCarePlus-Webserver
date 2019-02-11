@@ -14,10 +14,8 @@ import java.util.Optional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService
 {
-
     @Autowired
     private UsersRepository usersRepository;
-
 
     public void saveUser(Users user)
     {
