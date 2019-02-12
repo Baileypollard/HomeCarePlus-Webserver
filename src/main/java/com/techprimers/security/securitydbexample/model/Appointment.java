@@ -5,11 +5,13 @@ import org.springframework.data.couchbase.core.mapping.Document;
 
 import com.couchbase.client.java.repository.annotation.Id;
 
+import java.util.UUID;
+
 @Document
 public class Appointment
 {
     @Id
-    private String _id;
+    private String _id = UUID.randomUUID().toString();
 
     private String appointment_id;
     private String address;
@@ -148,6 +150,7 @@ public class Appointment
     {
         this._id = documentID;
     }
+
     public String getPunched_in_time()
     {
         return punched_in_time;

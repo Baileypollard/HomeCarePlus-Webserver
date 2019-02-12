@@ -1,11 +1,13 @@
 package views;
 
+import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
 import com.techprimers.security.securitydbexample.repository.ClientRepository;
 import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
+import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -19,7 +21,7 @@ public class CreateAppointmentView extends VerticalLayout
     private TextField endTime;
     private DateField dateField;
 
-    public CreateAppointmentView(EmployeeRepository employeeRepository, ClientRepository clientRepository, AppointmentRepository appointmentRepository)
+    public CreateAppointmentView(EmployeeRepository employeeRepository, ClientRepository clientRepository, AppointmentService appointmentService)
     {
         setWidth("100%");
         setHeight("100%");
@@ -45,12 +47,9 @@ public class CreateAppointmentView extends VerticalLayout
         Button createButton = new Button("Create Appointment");
         createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 
-
         createButton.addClickListener(clickEvent -> {
                     Appointment appointment = createNewAppointment();
-                    appointmentRepository.createAppointment(appointment.getKey(), appointment.getEmployee_id(), appointment.getDate(),
-                            appointment.getFirst_name(), appointment.getLast_name(), appointment.getAddress(), appointment.getStart_time(),
-                            appointment.getEnd_time(), appointment.getAppointment_id(), appointment.getGender(), appointment.getStatus());
+                    appointmentService.createAppointment(appointment);
                 });
 
         layout.addComponents(clientsCB, employeesCB, dateField, startTime, endTime, createButton);
@@ -68,7 +67,7 @@ public class CreateAppointmentView extends VerticalLayout
         String lastName = selectedClient.getLast_name();
         String address = selectedClient.getAddress();
         String startTime = this.startTime.getValue();
-        String endTime = this.startTime.getValue();
+        String endTime = this.endTime.getValue();
         String date = dateField.getValue().toString();
         String gender = selectedClient.getGender();
         String phoneNumber = selectedClient.getPhone_number();

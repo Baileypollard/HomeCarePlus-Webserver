@@ -23,11 +23,14 @@ public interface AppointmentRepository extends CouchbasePagingAndSortingReposito
 
     @Query("UPDATE #{#n1ql.bucket} SET schedule = ARRAY v FOR v IN schedule WHEN v.appointment_id != $1 END WHERE type='appointment' " +
             "AND ANY v IN schedule SATISFIES v.appointment_id = $1 END RETURNING META().id as docid")
-    void removeAppointmentByAppointment_id(String appointmentId);
+    void removeAppointmentByAppointmentId(String appointmentId);
 
     @Query("MERGE INTO #{#n1ql.bucket} AS d USING [1] AS o ON KEY $1 " +
             "WHEN MATCHED THEN UPDATE SET d.schedule = ARRAY_APPEND(d.schedule, {'first_name':$4, 'last_name':$5, 'address':$6, " +
-            "'start_time':$7, 'end_time':$8, 'appointment_id':$9, 'gender':$10, 'status':$11})")
+            "'start_time':$7, 'end_time':$8, 'appointment_id':$9, 'gender':$10, 'status':$11}) " +
+            "WHEN NOT MATCHED THEN INSERT {'type':'appointment', 'employee_id':$2, 'date':$3, " +
+            "'schedule': [ { 'appointment_id':$9, 'first_name':$4, 'last_name':$5, 'address':$6, 'gender':$10, 'status':$11, " +
+            "'start_time':$7, 'end_time':$8, 'punched_in_time':'', 'punched_out_time':'' } ] }")
     Appointment createAppointment(String KEY, String employeeId, String date, String firstName, String lastName, String address,
                            String startTime, String endTime, String appointmentId, String gender, String status);
 }

@@ -1,9 +1,11 @@
 package com.techprimers.security.securitydbexample.ui;
 
+import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
 import com.techprimers.security.securitydbexample.repository.ClientRepository;
 import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
+import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
@@ -31,7 +33,7 @@ public class AdminPanelUI extends UI
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private AppointmentServiceImpl appointmentService;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -48,14 +50,13 @@ public class AdminPanelUI extends UI
         HorizontalLayout buttonLayout = new HorizontalLayout();
 
         Button newAppointmentButton = new Button("New Appointment", VaadinIcons.PLUS_CIRCLE);
-        newAppointmentButton.addClickListener(clickEvent ->
-                {
+        newAppointmentButton.addClickListener(clickEvent -> {
                     Collection<Window> windows = getWindows();
                     if (getWindows().size() > 0)
                     {
                         windows.forEach(Window::close);
                     }
-                    addWindow(new CreateAppointmentWindow(employeeRepository, clientRepository, appointmentRepository));
+                    addWindow(new CreateAppointmentWindow(employeeRepository, clientRepository, appointmentService));
                 }
         );
         newAppointmentButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -63,8 +64,8 @@ public class AdminPanelUI extends UI
         Button deleteButton = new Button("Delete", VaadinIcons.CLOSE);
         deleteButton.addClickListener(clickEvent -> {
             Set<Appointment> selectedItems = appointmentGrid.getSelectedItems();
-            selectedItems.forEach(appointment -> appointmentRepository.removeAppointmentByAppointment_id(appointment.getAppointment_id()));
-            appointmentGrid.setItems(appointmentRepository.findAll());
+            selectedItems.forEach(appointment -> appointmentService.removeAppointmentByAppointmentId(appointment.getAppointment_id()));
+            appointmentGrid.setItems(appointmentService.findAll());
         });
         deleteButton.setStyleName(ValoTheme.BUTTON_DANGER);
 
@@ -87,7 +88,7 @@ public class AdminPanelUI extends UI
         appointmentGrid.addColumn(Appointment::getDate).setCaption("Date");
         appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment");
 
-        appointmentGrid.setItems(appointmentRepository.findAll());
+        appointmentGrid.setItems(appointmentService.findAll());
 
         root.addComponents(buttonLayout, appointmentGrid);
         root.setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);
