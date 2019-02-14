@@ -55,7 +55,8 @@ public class SecurityConfiguration
                     exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")).accessDeniedPage("/accessDenied")
                     .and().authorizeRequests()
                     .antMatchers("/VAADIN/**", "/PUSH/**", "/UIDL/**", "/login", "/login/**", "/error/**", "/accessDenied/**", "/vaadinServlet/**").permitAll()
-                    .antMatchers("/authorized", "/**").fullyAuthenticated();
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasRole("USER");
         }
     }
 

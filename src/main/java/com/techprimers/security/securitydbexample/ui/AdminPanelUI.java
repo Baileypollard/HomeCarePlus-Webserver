@@ -1,98 +1,169 @@
 package com.techprimers.security.securitydbexample.ui;
 
-import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
 import com.techprimers.security.securitydbexample.model.Appointment;
-import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
-import com.techprimers.security.securitydbexample.repository.ClientRepository;
-import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
+import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
+import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.VaadinRequest;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import elemental.json.JsonArray;
+import kaesdingeling.hybridmenu.HybridMenu;
+import kaesdingeling.hybridmenu.components.*;
+import kaesdingeling.hybridmenu.data.MenuConfig;
+import kaesdingeling.hybridmenu.design.DesignItem;
 import org.springframework.beans.factory.annotation.Autowired;
-import views.CreateAppointmentWindow;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
 
 @SpringUI(path = "/admin/panel")
 @Title("Admin Panel")
 @Theme("valo")
-public class AdminPanelUI extends UI
+public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 {
-    private VerticalLayout root;
-    private Grid<Appointment> appointmentGrid;
+    private HybridMenu hybridMenu;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeServiceImpl employeeService;
 
     @Autowired
     private AppointmentServiceImpl appointmentService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientServiceImpl clientService;
+
 
     @Override
     protected void init(VaadinRequest vaadinRequest)
     {
-        root = new VerticalLayout();
-        root.setWidth("100%");
-        root.setHeight("100%");
-        root.setSpacing(true);
+        hybridMenu = HybridMenu.get()
+                .withNaviContent(new VerticalLayout())
+                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getDarkDesign()))
+                .build();
 
-        setContent(root);
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buildTopOnlyMenu();
+        buildLeftMenu();
 
-        Button newAppointmentButton = new Button("New Appointment", VaadinIcons.PLUS_CIRCLE);
-        newAppointmentButton.addClickListener(clickEvent -> {
-                    Collection<Window> windows = getWindows();
-                    if (getWindows().size() > 0)
-                    {
-                        windows.forEach(Window::close);
-                    }
-                    addWindow(new CreateAppointmentWindow(employeeRepository, clientRepository, appointmentService));
-                }
-        );
-        newAppointmentButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+//        getNavigator().addViewChangeListener(new ViewChangeListener() {
+//            private static final long serialVersionUID = -1840309356612297980L;
+//            @Override
+//            public boolean beforeViewChange(ViewChangeEvent event) {
+//                if (event.getOldView() != null && event.getOldView().getClass().getSimpleName().equals(ThemeBuilderPage.class.getSimpleName())) {
+//                    hybridMenu.switchTheme(DesignItem.getDarkDesign());
+//                }
+//                return true;
+//            }
+//        });
 
-        Button deleteButton = new Button("Delete", VaadinIcons.CLOSE);
-        deleteButton.addClickListener(clickEvent -> {
-            Set<Appointment> selectedItems = appointmentGrid.getSelectedItems();
-            selectedItems.forEach(appointment -> appointmentService.removeAppointmentByAppointmentId(appointment.getAppointment_id()));
-            appointmentGrid.setItems(appointmentService.findAll());
+        setContent(hybridMenu);
+
+        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public void call(JsonArray arguments) {
+                detach();
+            }
         });
-        deleteButton.setStyleName(ValoTheme.BUTTON_DANGER);
 
-        buttonLayout.addComponents(newAppointmentButton, deleteButton);
+        Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e) { var e = e || window.event; aboutToClose(); return; };");
 
-        appointmentGrid = new Grid<>();
-        appointmentGrid.setWidth("100%");
-        appointmentGrid.setHeight("100%");
+    }
 
-        appointmentGrid.setSelectionMode(Grid.SelectionMode.MULTI);
+    @Override
+    public void detach(DetachEvent detachEvent)
+    {
+        getUI().detach();
+    }
 
-        appointmentGrid.addColumn(Appointment::getDocumentID).setCaption("DOC ID");
-        appointmentGrid.addColumn(Appointment::getAppointment_id).setCaption("APP ID");
-        appointmentGrid.addColumn(Appointment::getEmployee_id).setCaption("Employee");
-        appointmentGrid.addColumn(Appointment::getFirst_name).setCaption("First Name");
-        appointmentGrid.addColumn(Appointment::getLast_name).setCaption("Last Name");
-        appointmentGrid.addColumn(Appointment::getAddress).setCaption("Address");
-        appointmentGrid.addColumn(Appointment::getStart_time).setCaption("Start Time");
-        appointmentGrid.addColumn(Appointment::getEnd_time).setCaption("End Time");
-        appointmentGrid.addColumn(Appointment::getDate).setCaption("Date");
-        appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment");
 
-        appointmentGrid.setItems(appointmentService.findAll());
+    private void buildTopOnlyMenu()
+    {
+        TopMenu topMenu = hybridMenu.getTopMenu();
 
-        root.addComponents(buttonLayout, appointmentGrid);
-        root.setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);
-        root.setExpandRatio(appointmentGrid, 1.0f);
+        topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
+
+        topMenu.add(HMButton.get()
+                .withIcon(VaadinIcons.HOME)
+                .withDescription("Appointments")
+                .withNavigateTo(AppointmentPage.class));
+
+        hybridMenu.getNotificationCenter()
+                .setNotiButton(topMenu.add(HMButton.get()
+                        .withDescription("Notifications")));
+    }
+
+    private void buildLeftMenu()
+    {
+        LeftMenu leftMenu = hybridMenu.getLeftMenu();
+
+        leftMenu.add(HMLabel.get()
+                .withCaption("<b>Hybrid</b> Menu")
+                .withIcon(new ThemeResource("images/hybridmenu-Logo.png")));
+
+        hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
+                .withCaption("Appointments")
+                .withIcon(VaadinIcons.HOME)
+                .withNavigateTo(AppointmentPage.class)));
+
+        leftMenu.add(HMButton.get()
+                .withCaption("Notification Builder")
+                .withIcon(VaadinIcons.BELL)
+                .withNavigateTo(AppointmentPage.class));
+
+        leftMenu.add(HMButton.get()
+                .withCaption("Theme Builder")
+                .withIcon(FontAwesome.WRENCH)
+                .withNavigateTo(AppointmentPage.class));
+
+        HMSubMenu memberList = leftMenu.add(HMSubMenu.get()
+                .withCaption("Member")
+                .addSubView(AppointmentPage.class)
+                .withIcon(VaadinIcons.USERS));
+
+        memberList.add(HMButton.get()
+                .withCaption("Settings")
+                .withIcon(VaadinIcons.COGS)
+                .withNavigateTo(AppointmentPage.class));
+
+        memberList.add(HMButton.get()
+                .withCaption("Member")
+                .withIcon(VaadinIcons.USERS)
+                .withNavigateTo(AppointmentPage.class));
+
+        memberList.add(HMButton.get()
+                .withCaption("Group")
+                .withIcon(VaadinIcons.USERS)
+                .withNavigateTo(AppointmentPage.class));
+
+        HMSubMenu memberListTwo = memberList.add(HMSubMenu.get()
+                .withCaption("Member")
+                .withIcon(VaadinIcons.USERS));
+
+        HMSubMenu demoSettings = leftMenu.add(HMSubMenu.get()
+                .withCaption("Settings")
+                .withIcon(VaadinIcons.COGS));
+
+        demoSettings.add(HMButton.get()
+                .withCaption("White Theme")
+                .withIcon(VaadinIcons.PALETE)
+                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getWhiteDesign())));
+
+        demoSettings.add(HMButton.get()
+                .withCaption("Dark Theme")
+                .withIcon(VaadinIcons.PALETE)
+                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getDarkDesign())));
+
+        demoSettings.add(HMButton.get()
+                .withCaption("Minimal")
+                .withIcon(VaadinIcons.COG)
+                .withClickListener(e -> hybridMenu.getLeftMenu().toggleSize()));
+    }
+
+    public HybridMenu getHybridMenu() {
+        return hybridMenu;
     }
 
 

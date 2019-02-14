@@ -1,13 +1,11 @@
-package views;
+package com.techprimers.security.securitydbexample.views;
 
 import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
+import com.techprimers.security.securitydbexample.interfaces.ClientService;
+import com.techprimers.security.securitydbexample.interfaces.EmployeeService;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.model.Employee;
-import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
-import com.techprimers.security.securitydbexample.repository.ClientRepository;
-import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
-import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -21,7 +19,8 @@ public class CreateAppointmentView extends VerticalLayout
     private TextField endTime;
     private DateField dateField;
 
-    public CreateAppointmentView(EmployeeRepository employeeRepository, ClientRepository clientRepository, AppointmentService appointmentService)
+    public CreateAppointmentView(EmployeeService employeeService, ClientService clientService,
+                                 AppointmentService appointmentService)
     {
         setWidth("100%");
         setHeight("100%");
@@ -31,10 +30,10 @@ public class CreateAppointmentView extends VerticalLayout
         clientsCB = new ComboBox<>("Client: ");
         employeesCB = new ComboBox<>("Employee: ");
 
-        employeesCB.setItems(employeeRepository.findAll());
+        employeesCB.setItems(employeeService.findAll());
         employeesCB.setEmptySelectionAllowed(false);
 
-        clientsCB.setItems(clientRepository.findAll());
+        clientsCB.setItems(clientService.findAll());
         clientsCB.setEmptySelectionAllowed(false);
 
         dateField = new DateField("Date: ");
