@@ -1,0 +1,8 @@
+@import "../../addons/hybrid-menu/hybrid-menu.scss";
+@import "../valo/valo.scss";
+
+@mixin HybridMenu {
+  @include hybrid-menu;
+  @include valo;
+  // Insert your own theme rules here
+}

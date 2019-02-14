@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI(path = "/admin/panel")
 @Title("Admin Panel")
-@Theme("valo")
+@Theme("HybridMenu")
 public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 {
     private HybridMenu hybridMenu;
@@ -46,7 +46,6 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 
         buildTopOnlyMenu();
         buildLeftMenu();
-
 //        getNavigator().addViewChangeListener(new ViewChangeListener() {
 //            private static final long serialVersionUID = -1840309356612297980L;
 //            @Override
