@@ -18,4 +18,16 @@ public class EmployeeServiceImpl implements EmployeeService
     {
         return employeeRepository.findAll();
     }
+
+    @Override
+    public Employee createNewEmployee(Employee employee)
+    {
+        return null;
+    }
+
+    @Override
+    public void removeEmployeeById(String id)
+    {
+
+    }
 }

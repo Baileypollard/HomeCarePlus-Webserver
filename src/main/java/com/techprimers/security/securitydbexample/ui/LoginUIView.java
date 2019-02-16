@@ -3,22 +3,18 @@ package com.techprimers.security.securitydbexample.ui;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
-
-import javax.servlet.annotation.WebServlet;
-
-import com.vaadin.ui.*;
+import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
+import javax.servlet.annotation.WebServlet;
+
 @SpringUI(path = "/login")
 @Title("HomeCare+ Login")
-@Theme("valo")
+@Theme("HybridMenu")
 public class LoginUIView extends UI
 {
     @Autowired

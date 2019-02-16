@@ -6,4 +6,9 @@ import java.util.List;
 public interface ClientService
 {
     List<Client> findAll();
+
+    Client createClient(Client client);
+
+    void removeClientById(String clientId);
+
 }

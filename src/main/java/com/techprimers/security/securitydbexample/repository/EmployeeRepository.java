@@ -15,4 +15,12 @@ public interface EmployeeRepository extends CouchbasePagingAndSortingRepository<
     @Query("SELECT b.*, META(b).id as _ID, META(b).cas as _CAS FROM #{#n1ql.bucket} AS b " +
             "WHERE b.type = 'employee'")
     List<Employee> findAll();
+
+    @Query("SELECT b.*, META(b).id as _ID, META(b).cas as _CAS FROM #{#n1ql.bucket} AS b " +
+            "WHERE b.type = 'employee'")
+    Employee createNewEmployee(Employee employee);
+
+    @Query("SELECT b.*, META(b).id as _ID, META(b).cas as _CAS FROM #{#n1ql.bucket} AS b " +
+            "WHERE b.type = 'employee'")
+    void removeEmployeeById(String id);
 }

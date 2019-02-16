@@ -1,21 +1,23 @@
 package com.techprimers.security.securitydbexample.ui;
 
-import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
 import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
+import com.techprimers.security.securitydbexample.ui.Pages.AppointmentPage;
+import com.techprimers.security.securitydbexample.ui.Pages.ClientPage;
+import com.techprimers.security.securitydbexample.ui.Pages.EmployeePage;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 import elemental.json.JsonArray;
 import kaesdingeling.hybridmenu.HybridMenu;
 import kaesdingeling.hybridmenu.components.*;
 import kaesdingeling.hybridmenu.data.MenuConfig;
+import kaesdingeling.hybridmenu.data.enums.ToggleMode;
 import kaesdingeling.hybridmenu.design.DesignItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,8 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Theme("HybridMenu")
 public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 {
-    private HybridMenu hybridMenu;
-
     @Autowired
     private EmployeeServiceImpl employeeService;
 
@@ -35,34 +35,42 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     @Autowired
     private ClientServiceImpl clientService;
 
+    private Navigator navigator;
+    private HybridMenu hybridMenu;
 
     @Override
     protected void init(VaadinRequest vaadinRequest)
     {
+        VerticalLayout layout =  new VerticalLayout();
+        layout.setHeight("100%");
+
         hybridMenu = HybridMenu.get()
-                .withNaviContent(new VerticalLayout())
-                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getDarkDesign()))
+                .withNaviContent(layout)
+                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
 
-        buildTopOnlyMenu();
+        AppointmentPage appointmentPage =  new AppointmentPage(employeeService, clientService, appointmentService);
+        ClientPage clientPage =  new ClientPage(clientService);
+        EmployeePage employeePage = new EmployeePage(employeeService);
+
+        navigator = new Navigator(this, hybridMenu.getNaviContent());
+
+        navigator.addView("Appointments", appointmentPage);
+        navigator.addView("Clients", clientPage);
+        navigator.addView("Employees", employeePage);
+        navigator.navigateTo("Appointments");
+
+        buildTopMenu();
         buildLeftMenu();
-//        getNavigator().addViewChangeListener(new ViewChangeListener() {
-//            private static final long serialVersionUID = -1840309356612297980L;
-//            @Override
-//            public boolean beforeViewChange(ViewChangeEvent event) {
-//                if (event.getOldView() != null && event.getOldView().getClass().getSimpleName().equals(ThemeBuilderPage.class.getSimpleName())) {
-//                    hybridMenu.switchTheme(DesignItem.getDarkDesign());
-//                }
-//                return true;
-//            }
-//        });
 
         setContent(hybridMenu);
 
-        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
+        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction()
+        {
             private static final long serialVersionUID = 1L;
             @Override
-            public void call(JsonArray arguments) {
+            public void call(JsonArray arguments)
+            {
                 detach();
             }
         });
@@ -74,96 +82,59 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     @Override
     public void detach(DetachEvent detachEvent)
     {
+        System.out.println("Detached");
+        super.detach();
         getUI().detach();
     }
 
 
-    private void buildTopOnlyMenu()
+    private void buildTopMenu()
     {
         TopMenu topMenu = hybridMenu.getTopMenu();
 
-        topMenu.add(HMTextField.get(VaadinIcons.SEARCH, "Search ..."));
-
-        topMenu.add(HMButton.get()
+        topMenu.add(HMButton.get().withClickListener(click -> navigator.navigateTo("Appointments"))
                 .withIcon(VaadinIcons.HOME)
-                .withDescription("Appointments")
-                .withNavigateTo(AppointmentPage.class));
+                .withDescription("Appointments"));
 
-        hybridMenu.getNotificationCenter()
-                .setNotiButton(topMenu.add(HMButton.get()
-                        .withDescription("Notifications")));
+        topMenu.add(HMButton.get().withClickListener(clickEvent -> logOut()))
+                .withIcon(VaadinIcons.ARROW_BACKWARD)
+                .withDescription("Log out");
     }
 
     private void buildLeftMenu()
     {
         LeftMenu leftMenu = hybridMenu.getLeftMenu();
 
+        leftMenu.setToggleMode(ToggleMode.NORMAL);
+
         leftMenu.add(HMLabel.get()
-                .withCaption("<b>Hybrid</b> Menu")
-                .withIcon(new ThemeResource("images/hybridmenu-Logo.png")));
+                .withCaption("<b>Homecare+</b> Menu")
+                .withIcon(new ThemeResource("images/app_logo.png")));
 
-        hybridMenu.getBreadCrumbs().setRoot(leftMenu.add(HMButton.get()
+        leftMenu.add(HMButton.get()
                 .withCaption("Appointments")
-                .withIcon(VaadinIcons.HOME)
-                .withNavigateTo(AppointmentPage.class)));
+                .withIcon(VaadinIcons.LIST)
+                .withClickListener(clickEvent -> navigator.navigateTo("Appointments")));
 
         leftMenu.add(HMButton.get()
-                .withCaption("Notification Builder")
-                .withIcon(VaadinIcons.BELL)
-                .withNavigateTo(AppointmentPage.class));
+                .withCaption("Clients")
+                .withIcon(VaadinIcons.USERS)
+                .withClickListener(clickEvent -> navigator.navigateTo("Clients")));
 
         leftMenu.add(HMButton.get()
-                .withCaption("Theme Builder")
-                .withIcon(FontAwesome.WRENCH)
-                .withNavigateTo(AppointmentPage.class));
-
-        HMSubMenu memberList = leftMenu.add(HMSubMenu.get()
-                .withCaption("Member")
-                .addSubView(AppointmentPage.class)
-                .withIcon(VaadinIcons.USERS));
-
-        memberList.add(HMButton.get()
-                .withCaption("Settings")
-                .withIcon(VaadinIcons.COGS)
-                .withNavigateTo(AppointmentPage.class));
-
-        memberList.add(HMButton.get()
-                .withCaption("Member")
-                .withIcon(VaadinIcons.USERS)
-                .withNavigateTo(AppointmentPage.class));
-
-        memberList.add(HMButton.get()
-                .withCaption("Group")
-                .withIcon(VaadinIcons.USERS)
-                .withNavigateTo(AppointmentPage.class));
-
-        HMSubMenu memberListTwo = memberList.add(HMSubMenu.get()
-                .withCaption("Member")
-                .withIcon(VaadinIcons.USERS));
-
-        HMSubMenu demoSettings = leftMenu.add(HMSubMenu.get()
-                .withCaption("Settings")
-                .withIcon(VaadinIcons.COGS));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("White Theme")
-                .withIcon(VaadinIcons.PALETE)
-                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getWhiteDesign())));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("Dark Theme")
-                .withIcon(VaadinIcons.PALETE)
-                .withClickListener(e -> hybridMenu.switchTheme(DesignItem.getDarkDesign())));
-
-        demoSettings.add(HMButton.get()
-                .withCaption("Minimal")
-                .withIcon(VaadinIcons.COG)
-                .withClickListener(e -> hybridMenu.getLeftMenu().toggleSize()));
+                .withCaption("Employees")
+                .withIcon(VaadinIcons.USER)
+                .withClickListener(clickEvent -> navigator.navigateTo("Employees")));
     }
 
-    public HybridMenu getHybridMenu() {
+    public HybridMenu getHybridMenu()
+    {
         return hybridMenu;
     }
 
-
+    private void logOut()
+    {
+        VaadinService.getCurrentRequest().getWrappedSession().invalidate();
+        getUI().getPage().setLocation("/login");
+    }
 }

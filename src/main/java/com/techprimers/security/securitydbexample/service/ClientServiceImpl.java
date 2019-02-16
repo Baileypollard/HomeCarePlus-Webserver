@@ -19,4 +19,16 @@ public class ClientServiceImpl implements ClientService
     {
         return clientRepository.findAll();
     }
+
+    @Override
+    public Client createClient(Client client)
+    {
+        return null;
+    }
+
+    @Override
+    public void removeClientById(String clientId)
+    {
+
+    }
 }
