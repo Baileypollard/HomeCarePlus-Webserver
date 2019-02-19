@@ -1,5 +1,6 @@
 package com.techprimers.security.securitydbexample.model;
 
+import com.couchbase.client.java.repository.annotation.Field;
 import com.couchbase.client.java.repository.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 
@@ -11,37 +12,47 @@ public class Employee
     @Id
     private String id = UUID.randomUUID().toString();
 
-    private String employee_id;
+    @Field("employee_id")
+    private String employeeId;
 
-    private String first_name;
-    private String last_name;
+    @Field("first_name")
+    private String firstName;
+
+    @Field("last_name")
+    private String lastName;
+
+    @Field("gender")
     private String gender;
-    private String phone_number;
+
+    @Field("phone_number")
+    private String phoneNumber;
+
+    @Field("address")
     private String address;
 
-    public Employee(String employee_id, String first_name, String last_name, String gender, String phone_number, String address)
+    public Employee(String employeeId, String firstName, String lastName, String gender, String phoneNumber, String address)
     {
-        this.employee_id = employee_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.gender = gender;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
     public String getEmployeeId()
     {
-        return employee_id;
+        return employeeId;
     }
 
     public String getFirstName()
     {
-        return first_name;
+        return firstName;
     }
 
     public String getLastName()
     {
-        return last_name;
+        return lastName;
     }
 
     public String getGender()
@@ -56,7 +67,7 @@ public class Employee
 
     public String getPhoneNumber()
     {
-        return phone_number;
+        return phoneNumber;
     }
 
     public String getAddress()
