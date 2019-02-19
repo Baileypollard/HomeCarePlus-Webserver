@@ -22,12 +22,14 @@ public class EmployeeServiceImpl implements EmployeeService
     @Override
     public Employee createNewEmployee(Employee employee)
     {
-        return null;
+
+        return employeeRepository.createNewEmployee(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(),
+                employee.getAddress(), employee.getPhoneNumber(), employee.getGender());
     }
 
     @Override
-    public void removeEmployeeById(String id)
+    public void removeEmployee(Employee employee)
     {
-
+        employeeRepository.removeEmployeeById(employee.getEmployeeId());
     }
 }

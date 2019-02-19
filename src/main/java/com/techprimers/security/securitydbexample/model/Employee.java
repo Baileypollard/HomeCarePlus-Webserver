@@ -1,6 +1,5 @@
 package com.techprimers.security.securitydbexample.model;
 
-import com.couchbase.client.java.repository.annotation.Field;
 import com.couchbase.client.java.repository.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 
@@ -30,34 +29,19 @@ public class Employee
         this.address = address;
     }
 
-    public String getEmployee_id()
+    public String getEmployeeId()
     {
         return employee_id;
     }
 
-    public void setEmployee_id(String employee_id)
-    {
-        this.employee_id = employee_id;
-    }
-
-    public String getFirst_name()
+    public String getFirstName()
     {
         return first_name;
     }
 
-    public void setFirst_name(String first_name)
-    {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name()
+    public String getLastName()
     {
         return last_name;
-    }
-
-    public void setLast_name(String last_name)
-    {
-        this.last_name = last_name;
     }
 
     public String getGender()
@@ -70,14 +54,9 @@ public class Employee
         this.gender = gender;
     }
 
-    public String getPhone_number()
+    public String getPhoneNumber()
     {
         return phone_number;
-    }
-
-    public void setPhone_number(String phone_number)
-    {
-        this.phone_number = phone_number;
     }
 
     public String getAddress()
@@ -93,6 +72,6 @@ public class Employee
     @Override
     public String toString()
     {
-        return getFirst_name() + " " + getLast_name();
+        return getFirstName() + " " + getLastName();
     }
 }

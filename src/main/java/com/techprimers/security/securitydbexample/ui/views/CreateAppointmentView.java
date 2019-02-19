@@ -79,15 +79,15 @@ public class CreateAppointmentView extends VerticalLayout
             Client selectedClient = clientsCB.getSelectedItem().get();
             Employee selectedEmployee = employeesCB.getSelectedItem().get();
 
-            String firstName = selectedClient.getFirst_name();
-            String lastName = selectedClient.getLast_name();
+            String firstName = selectedClient.getFirstName();
+            String lastName = selectedClient.getLastName();
             String address = selectedClient.getAddress();
             String startTime = this.startTime.getValue().format(DateTimeFormatter.ofPattern("hh:mm a"));
             String endTime = this.endTime.getValue().format(DateTimeFormatter.ofPattern("hh:mm a"));
             String date = dateField.getValue().toString();
             String gender = selectedClient.getGender();
-            String phoneNumber = selectedClient.getPhone_number();
-            String employeeId = selectedEmployee.getEmployee_id();
+            String phoneNumber = selectedClient.getPhoneNumber();
+            String employeeId = selectedEmployee.getEmployeeId();
 
             return new Appointment(firstName, UUID.randomUUID().toString(), address, "", endTime, startTime, gender,
                     lastName, phoneNumber, "", "", "NEW", date, employeeId);

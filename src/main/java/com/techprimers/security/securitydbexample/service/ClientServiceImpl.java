@@ -23,12 +23,13 @@ public class ClientServiceImpl implements ClientService
     @Override
     public Client createClient(Client client)
     {
-        return null;
+        return clientRepository.createClient(client.getClientId(), client.getFirstName(), client.getLastName(),
+                client.getAddress(), client.getPhoneNumber(), client.getGender());
     }
 
     @Override
-    public void removeClientById(String clientId)
+    public void removeClient(Client client)
     {
-
+        clientRepository.removeClient(client.getClientId());
     }
 }

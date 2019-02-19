@@ -13,7 +13,7 @@ public class CreateClientView extends VerticalLayout
     private TextField lastName;
     private TextField phoneNumber;
     private TextField address;
-    private TextField gender;
+    private ComboBox<String> gender;
 
     public CreateClientView(ClientServiceImpl clientService)
     {
@@ -27,7 +27,8 @@ public class CreateClientView extends VerticalLayout
         lastName = new TextField("Last Name: ");
         phoneNumber = new TextField("Phone Number: ");
         address = new TextField("Address: ");
-        gender = new TextField("Gender");
+        gender = new ComboBox<String>("Gender");
+        gender.setItems("Male", "Female");
 
         Button createButton = new Button("Create Client");
         createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);

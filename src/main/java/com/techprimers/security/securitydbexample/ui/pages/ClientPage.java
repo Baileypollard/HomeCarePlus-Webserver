@@ -1,4 +1,4 @@
-package com.techprimers.security.securitydbexample.ui.Pages;
+package com.techprimers.security.securitydbexample.ui.pages;
 
 import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
@@ -14,7 +14,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.Collection;
 import java.util.Set;
 
-@PreserveOnRefresh
 public class ClientPage extends VerticalLayout implements View
 {
     private Grid<Client> clientGrid;
@@ -38,7 +37,9 @@ public class ClientPage extends VerticalLayout implements View
                         windows.forEach(Window::close);
                     }
                     CreateClientView clientView = new CreateClientView(clientService);
-                    getUI().addWindow(new CreateWindowWithLayout(clientView));
+                    Window window = new CreateWindowWithLayout(clientView);
+                    getUI().addWindow(window);
+                    window.addCloseListener(closeEvent -> refreshGrid());
                 }
         );
         newClientButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -48,7 +49,7 @@ public class ClientPage extends VerticalLayout implements View
         deleteButton.addClickListener(clickEvent ->
         {
             Set<Client> selectedItems = clientGrid.getSelectedItems();
-            selectedItems.forEach(client -> clientService.removeClientById(client.getClient_id()));
+            selectedItems.forEach(clientService::removeClient);
             refreshGrid();
         });
 
@@ -60,9 +61,11 @@ public class ClientPage extends VerticalLayout implements View
 
         clientGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        clientGrid.addColumn(Client::getFirst_name).setCaption("First Name");
-        clientGrid.addColumn(Client::getLast_name).setCaption("Last Name");
-
+        clientGrid.addColumn(Client::getFirstName).setCaption("First Name");
+        clientGrid.addColumn(Client::getLastName).setCaption("Last Name");
+        clientGrid.addColumn(Client::getAddress).setCaption("Address");
+        clientGrid.addColumn(Client::getPhoneNumber).setCaption("Phone Number");
+        clientGrid.addColumn(Client::getGender).setCaption("Gender");
 
         clientGrid.setItems(clientService.findAll());
 

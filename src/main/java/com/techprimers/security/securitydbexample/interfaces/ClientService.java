@@ -9,6 +9,6 @@ public interface ClientService
 
     Client createClient(Client client);
 
-    void removeClientById(String clientId);
+    void removeClient(Client client);
 
 }

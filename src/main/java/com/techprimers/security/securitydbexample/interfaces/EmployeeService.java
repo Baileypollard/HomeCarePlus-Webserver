@@ -10,5 +10,5 @@ public interface EmployeeService
 
     Employee createNewEmployee(Employee employee);
 
-    void removeEmployeeById(String id);
+    void removeEmployee(Employee employee);
 }

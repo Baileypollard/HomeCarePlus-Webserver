@@ -13,8 +13,11 @@ public interface ClientRepository extends CouchbasePagingAndSortingRepository<Cl
             "WHERE b.type = 'client'")
     List<Client> findAll();
 
-    @Query("SELECT b.*, META(b).id as _ID, META(b).cas as _CAS FROM #{#n1ql.bucket} AS b " +
-            "WHERE b.type = 'client'")
-    Client createClient(String id, String first_name, String last_name, String address, String gender,
-                        String phoneNumber);
+    @Query("INSERT INTO #{#n1ql.bucket} (KEY, VALUE) VALUES ($1, {'first_name':$2, 'last_name':$3, 'address':$4" +
+            ", 'phone_number':$5, 'gender':$6, 'type':'client', 'client_id':$1})")
+    Client createClient(String clientID,  String firstName, String lastName, String address, String phoneNumber,
+                        String gender);
+
+    @Query("DELETE FROM #{#n1ql.bucket} AS b where b.type = 'client' AND b.client_id = $1 RETURNING META().id")
+    void removeClient(String id);
 }

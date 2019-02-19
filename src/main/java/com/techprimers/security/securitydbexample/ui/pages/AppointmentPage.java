@@ -1,4 +1,4 @@
-package com.techprimers.security.securitydbexample.ui.Pages;
+package com.techprimers.security.securitydbexample.ui.pages;
 
 import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
 import com.techprimers.security.securitydbexample.interfaces.ClientService;
@@ -60,8 +60,6 @@ public class AppointmentPage extends VerticalLayout implements View
 
         appointmentGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        appointmentGrid.addColumn(Appointment::getDocumentID).setCaption("DOC ID").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getAppointment_id).setCaption("APP ID").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getEmployee_id).setCaption("Employee").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getFirst_name).setCaption("First Name").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getLast_name).setCaption("Last Name").setWidthUndefined();

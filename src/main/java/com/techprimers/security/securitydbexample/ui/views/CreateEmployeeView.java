@@ -4,6 +4,7 @@ import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.data.couchbase.core.CouchbaseQueryExecutionException;
 
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -15,7 +16,7 @@ public class CreateEmployeeView extends VerticalLayout
     private TextField lastName;
     private TextField phoneNumber;
     private TextField address;
-    private TextField gender;
+    private ComboBox<String> gender;
 
     public CreateEmployeeView(EmployeeServiceImpl employeeService)
     {
@@ -30,7 +31,8 @@ public class CreateEmployeeView extends VerticalLayout
         lastName = new TextField("Last Name: ");
         phoneNumber = new TextField("Phone Number: ");
         address = new TextField("Address: ");
-        gender = new TextField("Gender");
+        gender = new ComboBox<String>("Gender");
+        gender.setItems("Male", "Female");
 
         Button createButton = new Button("Create Employee");
         createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -39,9 +41,17 @@ public class CreateEmployeeView extends VerticalLayout
             Employee employee = createNewEmployee();
             if (employee != null)
             {
-                employeeService.createNewEmployee(employee);
-                Collection<Window> windows = getUI().getWindows();
-                windows.forEach(Window::close);
+                try
+                {
+                    employeeService.createNewEmployee(employee);
+                    Collection<Window> windows = getUI().getWindows();
+                    windows.forEach(Window::close);
+                }
+                catch (CouchbaseQueryExecutionException e)
+                {
+                    Notification.show("You can not create two employees with the same id, Please try again", Notification.Type.ERROR_MESSAGE);
+                }
+
             }
         });
 

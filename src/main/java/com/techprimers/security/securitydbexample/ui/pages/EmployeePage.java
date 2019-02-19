@@ -1,4 +1,4 @@
-package com.techprimers.security.securitydbexample.ui.Pages;
+package com.techprimers.security.securitydbexample.ui.pages;
 
 import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
@@ -18,9 +18,12 @@ import java.util.Set;
 public class EmployeePage extends VerticalLayout implements View
 {
     private Grid<Employee> employeeGrid;
+    private EmployeeServiceImpl employeeService;
 
     public EmployeePage(EmployeeServiceImpl employeeService)
     {
+        this.employeeService = employeeService;
+
         setHeight("100%");
         setSpacing(true);
 
@@ -35,7 +38,9 @@ public class EmployeePage extends VerticalLayout implements View
                         windows.forEach(Window::close);
                     }
                     VerticalLayout employeeLayout = new CreateEmployeeView(employeeService);
-                    getUI().addWindow(new CreateWindowWithLayout(employeeLayout));
+                    Window window = new CreateWindowWithLayout(employeeLayout);
+                    getUI().addWindow(window);
+                    window.addCloseListener(closeEvent -> refreshGrid());
                 }
         );
         newClientButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -45,8 +50,8 @@ public class EmployeePage extends VerticalLayout implements View
         deleteButton.addClickListener(clickEvent ->
         {
             Set<Employee> selectedItems = employeeGrid.getSelectedItems();
-            selectedItems.forEach(employee -> employeeService.removeEmployeeById(employee.getEmployee_id()));
-            employeeGrid.setItems(employeeService.findAll());
+            selectedItems.forEach(employeeService::removeEmployee);
+            refreshGrid();
         });
 
         buttonLayout.addComponents(newClientButton, deleteButton);
@@ -57,14 +62,23 @@ public class EmployeePage extends VerticalLayout implements View
 
         employeeGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        employeeGrid.addColumn(Employee::getFirst_name).setCaption("First Name");
-        employeeGrid.addColumn(Employee::getLast_name).setCaption("Last Name");
+        employeeGrid.addColumn(Employee::getEmployeeId).setCaption("Employee Id");
+        employeeGrid.addColumn(Employee::getFirstName).setCaption("First Name");
+        employeeGrid.addColumn(Employee::getLastName).setCaption("Last Name");
+        employeeGrid.addColumn(Employee::getAddress).setCaption("Address");
+        employeeGrid.addColumn(Employee::getPhoneNumber).setCaption("Phone Number");
+        employeeGrid.addColumn(Employee::getGender).setCaption("Gender");
 
         employeeGrid.setItems(employeeService.findAll());
 
         addComponents(buttonLayout, employeeGrid);
         setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);
         setExpandRatio(employeeGrid, 1.0f);
+    }
+
+    private void refreshGrid()
+    {
+        employeeGrid.setItems(employeeService.findAll());
     }
 
     @Override
