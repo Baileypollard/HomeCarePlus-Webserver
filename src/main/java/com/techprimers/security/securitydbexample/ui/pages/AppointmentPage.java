@@ -24,6 +24,8 @@ public class AppointmentPage extends VerticalLayout implements View
     {
         this.appointmentService = appointmentService;
 
+        setSizeFull();
+
         setSpacing(true);
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -74,8 +76,6 @@ public class AppointmentPage extends VerticalLayout implements View
         addComponents(buttonLayout, appointmentGrid);
         setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);
         setExpandRatio(appointmentGrid, 1.0f);
-
-        setSizeFull();
     }
 
     @Override

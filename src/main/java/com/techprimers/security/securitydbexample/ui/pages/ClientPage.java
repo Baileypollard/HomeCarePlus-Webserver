@@ -4,7 +4,6 @@ import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
 import com.techprimers.security.securitydbexample.ui.views.CreateClientView;
 import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayout;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -66,6 +65,7 @@ public class ClientPage extends VerticalLayout implements View
         clientGrid.addColumn(Client::getAddress).setCaption("Address");
         clientGrid.addColumn(Client::getPhoneNumber).setCaption("Phone Number");
         clientGrid.addColumn(Client::getGender).setCaption("Gender");
+        clientGrid.addColumn(Client::getAdditionalInformation).setCaption("Additional Information");
 
         clientGrid.setItems(clientService.findAll());
 

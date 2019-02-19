@@ -14,6 +14,7 @@ public class CreateClientView extends VerticalLayout
     private TextField phoneNumber;
     private TextField address;
     private ComboBox<String> gender;
+    private TextArea additionalInformation;
 
     public CreateClientView(ClientServiceImpl clientService)
     {
@@ -29,6 +30,7 @@ public class CreateClientView extends VerticalLayout
         address = new TextField("Address: ");
         gender = new ComboBox<String>("Gender");
         gender.setItems("Male", "Female");
+        additionalInformation = new TextArea("Additional Information: ");
 
         Button createButton = new Button("Create Client");
         createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
@@ -43,7 +45,7 @@ public class CreateClientView extends VerticalLayout
             }
         });
 
-        layout.addComponents(firstName, lastName, address, phoneNumber, gender, createButton);
+        layout.addComponents(firstName, lastName, address, phoneNumber, gender, additionalInformation, createButton);
         addComponent(layout);
 
         setComponentAlignment(layout, Alignment.TOP_CENTER);
@@ -58,8 +60,8 @@ public class CreateClientView extends VerticalLayout
             String address = this.address.getValue();
             String phoneNumber = this.phoneNumber.getValue();
             String gender = this.gender.getValue();
-
-            return new Client(UUID.randomUUID().toString(), firstName, lastName, address, gender, phoneNumber);
+            String additionalInfo = this.additionalInformation.getValue();
+            return new Client(UUID.randomUUID().toString(), firstName, lastName, address, gender, phoneNumber, additionalInfo);
         }
         catch (NoSuchElementException e)
         {

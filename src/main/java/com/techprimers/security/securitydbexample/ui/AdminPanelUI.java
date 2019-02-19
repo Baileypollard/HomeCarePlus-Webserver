@@ -2,6 +2,7 @@ package com.techprimers.security.securitydbexample.ui;
 
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
+import com.techprimers.security.securitydbexample.service.CustomUserDetailsService;
 import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.techprimers.security.securitydbexample.ui.pages.AppointmentPage;
 import com.techprimers.security.securitydbexample.ui.pages.ClientPage;
@@ -35,6 +36,9 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     @Autowired
     private ClientServiceImpl clientService;
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
     private Navigator navigator;
     private HybridMenu hybridMenu;
 
@@ -42,7 +46,9 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     protected void init(VaadinRequest vaadinRequest)
     {
         VerticalLayout layout =  new VerticalLayout();
+
         layout.setHeight("100%");
+        layout.setWidth("100%");
 
         hybridMenu = HybridMenu.get()
                 .withNaviContent(layout)
@@ -51,7 +57,7 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 
         AppointmentPage appointmentPage =  new AppointmentPage(employeeService, clientService, appointmentService);
         ClientPage clientPage =  new ClientPage(clientService);
-        EmployeePage employeePage = new EmployeePage(employeeService);
+        EmployeePage employeePage = new EmployeePage(userDetailsService, employeeService);
 
         navigator = new Navigator(this, hybridMenu.getNaviContent());
 

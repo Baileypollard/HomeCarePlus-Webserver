@@ -9,13 +9,13 @@ public class Client
 {
     @Id
     @Field(value = "client_id")
-    private String client_id;
+    private String clientId;
 
     @Field(value = "first_name")
-    private String first_name;
+    private String firstName;
 
     @Field(value = "last_name")
-    private String last_name;
+    private String lastName;
 
     @Field(value = "address")
     private String address;
@@ -24,31 +24,41 @@ public class Client
     private String gender;
 
     @Field(value = "phone_number")
-    private String phone_number;
+    private String phoneNumber;
 
-    public Client(String client_id, String first_name, String last_name, String address, String gender, String phone_number)
+    @Field(value = "additional_information")
+    private String additionalInformation;
+
+    public Client(String clientId, String firstName, String lastName,
+                  String address, String gender, String phoneNumber, String additionalInformation)
     {
-        this.client_id = client_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.clientId = clientId;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.gender = gender;
-        this.phone_number = phone_number;
+        this.additionalInformation = additionalInformation;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAdditionalInformation()
+    {
+        return additionalInformation;
     }
 
     public String getClientId()
     {
-        return client_id;
+        return clientId;
     }
 
     public String getFirstName()
     {
-        return first_name;
+        return firstName;
     }
 
     public String getLastName()
     {
-        return last_name;
+        return lastName;
     }
 
     public String getAddress()
@@ -73,7 +83,7 @@ public class Client
 
     public String getPhoneNumber()
     {
-        return phone_number;
+        return phoneNumber;
     }
 
     @Override

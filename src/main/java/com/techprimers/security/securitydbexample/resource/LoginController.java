@@ -97,17 +97,8 @@ public class LoginController {
     @ResponseBody
     public String register(@RequestBody Users user)
     {
-//        if (userDetailsService.loadUserByUsername(user.getName()) != null)
-//        {
-//            //user already exists
-//            System.out.println("User with name: " + user.getName() + " already exists...");
-//            return "User:" + user.getName() +  " already exists";
-//        }
-//        else
-//        {
-            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            userDetailsService.saveUser(user);
-            return "Successfully Registered user " + user.getId();
-       // }
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        userDetailsService.saveUser(user);
+        return "Successfully Registered user " + user.getId();
     }
 }

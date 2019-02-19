@@ -24,7 +24,7 @@ public class ClientServiceImpl implements ClientService
     public Client createClient(Client client)
     {
         return clientRepository.createClient(client.getClientId(), client.getFirstName(), client.getLastName(),
-                client.getAddress(), client.getPhoneNumber(), client.getGender());
+                client.getAddress(), client.getPhoneNumber(), client.getGender(), client.getAdditionalInformation());
     }
 
     @Override

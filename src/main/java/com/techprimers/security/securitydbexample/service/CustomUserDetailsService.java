@@ -22,6 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService
         usersRepository.save(user);
     }
 
+    public void deleteUserById(String id)
+    {
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {

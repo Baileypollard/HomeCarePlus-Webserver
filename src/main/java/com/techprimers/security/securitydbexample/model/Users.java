@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.model;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -30,10 +31,23 @@ public class Users
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Collection<Role> roles;
 
     public Users()
     {
+    }
+
+    public Users(String email, String password, String firstName, String lastName, int active, String phoneNumb, String address, String username, Collection<Role> roles)
+    {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.active = active;
+        this.phoneNumb = phoneNumb;
+        this.address = address;
+        this.username = username;
+        this.roles = roles;
     }
 
     public Users(Users users)
@@ -140,7 +154,7 @@ public class Users
         this.active = active;
     }
 
-    public Set<Role> getRoles()
+    public Collection<Role> getRoles()
     {
         return roles;
     }

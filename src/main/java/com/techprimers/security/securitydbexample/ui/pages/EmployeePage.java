@@ -1,10 +1,10 @@
 package com.techprimers.security.securitydbexample.ui.pages;
 
 import com.techprimers.security.securitydbexample.model.Employee;
+import com.techprimers.security.securitydbexample.service.CustomUserDetailsService;
 import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.techprimers.security.securitydbexample.ui.views.CreateEmployeeView;
 import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayout;
-import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -14,13 +14,12 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.Collection;
 import java.util.Set;
 
-@PreserveOnRefresh
 public class EmployeePage extends VerticalLayout implements View
 {
     private Grid<Employee> employeeGrid;
     private EmployeeServiceImpl employeeService;
 
-    public EmployeePage(EmployeeServiceImpl employeeService)
+    public EmployeePage(CustomUserDetailsService customUserDetails, EmployeeServiceImpl employeeService)
     {
         this.employeeService = employeeService;
 
@@ -29,32 +28,36 @@ public class EmployeePage extends VerticalLayout implements View
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
 
-        Button newClientButton = new Button("New Employee", VaadinIcons.PLUS_CIRCLE);
-        newClientButton.addClickListener(clickEvent ->
+        Button newEmployeeButton = new Button("New Employee", VaadinIcons.PLUS_CIRCLE);
+        newEmployeeButton.addClickListener(clickEvent ->
                 {
                     Collection<Window> windows = getUI().getWindows();
                     if (windows.size() > 0)
                     {
                         windows.forEach(Window::close);
                     }
-                    VerticalLayout employeeLayout = new CreateEmployeeView(employeeService);
+                    VerticalLayout employeeLayout = new CreateEmployeeView(customUserDetails, employeeService);
                     Window window = new CreateWindowWithLayout(employeeLayout);
                     getUI().addWindow(window);
                     window.addCloseListener(closeEvent -> refreshGrid());
                 }
         );
-        newClientButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        newEmployeeButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         Button deleteButton = new Button("Delete", VaadinIcons.CLOSE);
         deleteButton.setStyleName(ValoTheme.BUTTON_DANGER);
         deleteButton.addClickListener(clickEvent ->
         {
             Set<Employee> selectedItems = employeeGrid.getSelectedItems();
-            selectedItems.forEach(employeeService::removeEmployee);
+            selectedItems.forEach(employee -> {
+                        employeeService.removeEmployee(employee);
+                        customUserDetails.deleteUserById(employee.getEmployeeId());
+                    }
+            );
             refreshGrid();
         });
 
-        buttonLayout.addComponents(newClientButton, deleteButton);
+        buttonLayout.addComponents(newEmployeeButton, deleteButton);
 
         employeeGrid = new Grid<>();
         employeeGrid.setWidth("100%");
