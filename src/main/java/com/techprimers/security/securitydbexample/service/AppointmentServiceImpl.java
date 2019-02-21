@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.service;
 
 import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
+import com.techprimers.security.securitydbexample.utils.DocumentCreator;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ public class AppointmentServiceImpl implements AppointmentService
     @Override
     public Appointment createAppointment(Appointment appointment)
     {
-        return appointmentRepository.createAppointment(appointment.getKey(), appointment.getEmployee_id(), appointment.getDate(),
-                appointment.getFirst_name(), appointment.getLast_name(), appointment.getAddress(), appointment.getStart_time(),
-                appointment.getEnd_time(), appointment.getAppointment_id(), appointment.getGender(), appointment.getStatus());
+        return appointmentRepository.createAppointment(appointment.getKey(), DocumentCreator.createAppointment(appointment),
+                DocumentCreator.createAppointmentDocument(appointment));
     }
 }

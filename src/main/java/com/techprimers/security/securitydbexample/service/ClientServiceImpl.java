@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.service;
 
 import com.techprimers.security.securitydbexample.interfaces.ClientService;
+import com.techprimers.security.securitydbexample.utils.DocumentCreator;
 import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,7 @@ public class ClientServiceImpl implements ClientService
     @Override
     public Client createClient(Client client)
     {
-        return clientRepository.createClient(client.getClientId(), client.getFirstName(), client.getLastName(),
-                client.getAddress(), client.getPhoneNumber(), client.getGender(), client.getAdditionalInformation());
+        return clientRepository.createClient(client.getClientId(), DocumentCreator.createClientDocument(client));
     }
 
     @Override

@@ -51,7 +51,7 @@ public class AppointmentPage extends VerticalLayout implements View
         deleteButton.addClickListener(clickEvent ->
         {
             Set<Appointment> selectedItems = appointmentGrid.getSelectedItems();
-            selectedItems.forEach(appointment -> appointmentService.removeAppointmentByAppointmentId(appointment.getAppointment_id()));
+            selectedItems.forEach(appointment -> appointmentService.removeAppointmentByAppointmentId(appointment.getAppointmentId()));
             refreshGrid();
         });
 
@@ -62,12 +62,12 @@ public class AppointmentPage extends VerticalLayout implements View
 
         appointmentGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        appointmentGrid.addColumn(Appointment::getEmployee_id).setCaption("Employee").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getFirst_name).setCaption("First Name").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getLast_name).setCaption("Last Name").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getEmployeeId).setCaption("Employee").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getFirstName).setCaption("First Name").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getLastName).setCaption("Last Name").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getAddress).setCaption("Address").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getStart_time).setCaption("Start Time").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getEnd_time).setCaption("End Time").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getStartTime).setCaption("Start Time").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getEndTime).setCaption("End Time").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getDate).setCaption("Date").setWidthUndefined();
         appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment").setWidthUndefined();
 

@@ -13,62 +13,66 @@ public class Appointment
     @Id
     private String _id = UUID.randomUUID().toString();
 
-    private String appointment_id;
+    @Field("appointment_id")
+    private String appointmentId;
+    @Field("address")
     private String address;
+    @Field("comment")
     private String comment;
-    private String end_time;
-    private String start_time;
+    @Field("end_time")
+    private String endTime;
+    @Field("start_time")
+    private String startTime;
+    @Field("gender")
     private String gender;
-    private String last_name;
-    private String phone_number;
-    private String punched_in_time;
-    private String punched_out_time;
+    @Field("last_name")
+    private String lastName;
+    @Field("phone_number")
+    private String phoneNumber;
+    @Field("punched_in_time")
+    private String punchedInTime;
+    @Field("punched_out_time")
+    private String punchedOutTime;
+    @Field("status")
     private String status;
+    @Field("date")
     private String date;
-    private String employee_id;
-    private String first_name;
+    @Field("employee_id")
+    private String employeeId;
+    @Field("first_name")
+    private String firstName;
 
     public Appointment()
     {
 
     }
 
-    public Appointment(String first_name, String appointment_id, String address, String comment, String end_time, String start_time, String gender, String last_name, String phone_number, String punched_in_time, String punched_out_time, String status, String date, String employee_id)
+    public Appointment(String firstName, String appointmentId, String address, String comment, String endTime, String startTime, String gender, String lastName, String phoneNumber, String punchedInTime, String punchedOutTime, String status, String date, String employeeId)
     {
-        this.appointment_id = appointment_id;
+        this.appointmentId = appointmentId;
         this.address = address;
         this.comment = comment;
-        this.end_time = end_time;
-        this.start_time = start_time;
+        this.endTime = endTime;
+        this.startTime = startTime;
         this.gender = gender;
-        this.last_name = last_name;
-        this.phone_number = phone_number;
-        this.punched_in_time = punched_in_time;
-        this.punched_out_time = punched_out_time;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.punchedInTime = punchedInTime;
+        this.punchedOutTime = punchedOutTime;
         this.status = status;
         this.date = date;
-        this.employee_id = employee_id;
-        this.first_name = first_name;
+        this.employeeId = employeeId;
+        this.firstName = firstName;
     }
 
-    public String getFirst_name()
+    public String getFirstName()
     {
-        return first_name;
+        return firstName;
     }
 
-    public void setFirst_name(String first_name)
+    public String getAppointmentId()
     {
-        this.first_name = first_name;
-    }
-
-    public String getAppointment_id()
-    {
-        return appointment_id;
-    }
-
-    public void setAppointment_id(String appointment_id)
-    {
-        this.appointment_id = appointment_id;
+        return appointmentId;
     }
 
     public String getAddress()
@@ -86,29 +90,14 @@ public class Appointment
         return comment;
     }
 
-    public void setComment(String comment)
+    public String getEndTime()
     {
-        this.comment = comment;
+        return endTime;
     }
 
-    public String getEnd_time()
+    public String getStartTime()
     {
-        return end_time;
-    }
-
-    public void setEnd_time(String end_time)
-    {
-        this.end_time = end_time;
-    }
-
-    public String getStart_time()
-    {
-        return start_time;
-    }
-
-    public void setStart_time(String start_time)
-    {
-        this.start_time = start_time;
+        return startTime;
     }
 
     public String getGender()
@@ -116,29 +105,24 @@ public class Appointment
         return gender;
     }
 
-    public void setGender(String gender)
+    public String getLastName()
     {
-        this.gender = gender;
+        return lastName;
     }
 
-    public String getLast_name()
+    public void setLastName(String last_name)
     {
-        return last_name;
+        this.lastName = last_name;
     }
 
-    public void setLast_name(String last_name)
+    public String getPhoneNumber()
     {
-        this.last_name = last_name;
+        return phoneNumber;
     }
 
-    public String getPhone_number()
+    public void setPhoneNumber(String phone_number)
     {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number)
-    {
-        this.phone_number = phone_number;
+        this.phoneNumber = phone_number;
     }
 
     public String getDocumentID()
@@ -151,24 +135,24 @@ public class Appointment
         this._id = documentID;
     }
 
-    public String getPunched_in_time()
+    public String getPunchedInTime()
     {
-        return punched_in_time;
+        return punchedInTime;
     }
 
-    public void setPunched_in_time(String punched_in_time)
+    public void setPunchedInTime(String punched_in_time)
     {
-        this.punched_in_time = punched_in_time;
+        this.punchedInTime = punched_in_time;
     }
 
-    public String getPunched_out_time()
+    public String getPunchedOutTime()
     {
-        return punched_out_time;
+        return punchedOutTime;
     }
 
-    public void setPunched_out_time(String punched_out_time)
+    public void setPunchedOutTime(String punched_out_time)
     {
-        this.punched_out_time = punched_out_time;
+        this.punchedOutTime = punched_out_time;
     }
 
     public String getStatus()
@@ -191,18 +175,18 @@ public class Appointment
         this.date = date;
     }
 
-    public String getEmployee_id()
+    public String getEmployeeId()
     {
-        return employee_id;
+        return employeeId;
     }
 
-    public void setEmployee_id(String employee_id)
+    public void setEmployeeId(String employee_id)
     {
-        this.employee_id = employee_id;
+        this.employeeId = employee_id;
     }
 
     public String getKey()
     {
-        return getEmployee_id() + "." + getDate();
+        return getEmployeeId() + "." + getDate();
     }
 }

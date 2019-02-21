@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.repository;
 
 
+import com.couchbase.client.java.document.json.JsonObject;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import org.springframework.data.couchbase.core.query.N1qlPrimaryIndexed;
 import org.springframework.data.couchbase.core.query.Query;
@@ -26,11 +27,7 @@ public interface AppointmentRepository extends CouchbasePagingAndSortingReposito
     void removeAppointmentByAppointmentId(String appointmentId);
 
     @Query("MERGE INTO #{#n1ql.bucket} AS d USING [1] AS o ON KEY $1 " +
-            "WHEN MATCHED THEN UPDATE SET d.schedule = ARRAY_APPEND(d.schedule, {'first_name':$4, 'last_name':$5, 'address':$6, " +
-            "'start_time':$7, 'end_time':$8, 'appointment_id':$9, 'gender':$10, 'status':$11}) " +
-            "WHEN NOT MATCHED THEN INSERT {'type':'appointment', 'employee_id':$2, 'date':$3, " +
-            "'schedule': [ { 'appointment_id':$9, 'first_name':$4, 'last_name':$5, 'address':$6, 'gender':$10, 'status':$11, " +
-            "'start_time':$7, 'end_time':$8, 'punched_in_time':'', 'punched_out_time':'' } ] }")
-    Appointment createAppointment(String KEY, String employeeId, String date, String firstName, String lastName, String address,
-                           String startTime, String endTime, String appointmentId, String gender, String status);
+            "WHEN MATCHED THEN UPDATE SET d.schedule = ARRAY_APPEND(d.schedule, $2) " +
+            "WHEN NOT MATCHED THEN INSERT $3")
+    Appointment createAppointment(String KEY, JsonObject schedule, JsonObject document);
 }

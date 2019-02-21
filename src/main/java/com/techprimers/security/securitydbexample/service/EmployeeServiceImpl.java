@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.service;
 
 import com.techprimers.security.securitydbexample.interfaces.EmployeeService;
+import com.techprimers.security.securitydbexample.utils.DocumentCreator;
 import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService
     public Employee createNewEmployee(Employee employee)
     {
 
-        return employeeRepository.createNewEmployee(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(),
-                employee.getAddress(), employee.getPhoneNumber(), employee.getGender());
+        return employeeRepository.createNewEmployee(employee.getEmployeeId(), DocumentCreator.createEmployeeDocument(employee));
     }
 
     @Override

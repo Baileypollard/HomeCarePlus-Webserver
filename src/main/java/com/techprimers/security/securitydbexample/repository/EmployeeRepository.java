@@ -1,5 +1,6 @@
 package com.techprimers.security.securitydbexample.repository;
 
+import com.couchbase.client.java.document.json.JsonObject;
 import com.techprimers.security.securitydbexample.model.Employee;
 import org.springframework.data.couchbase.core.query.N1qlPrimaryIndexed;
 import org.springframework.data.couchbase.core.query.Query;
@@ -16,11 +17,8 @@ public interface EmployeeRepository extends CouchbasePagingAndSortingRepository<
             "WHERE b.type = 'employee'")
     List<Employee> findAll();
 
-
-    @Query("INSERT INTO #{#n1ql.bucket} (KEY, VALUE) VALUES ($1, {'first_name':$2, 'last_name':$3, 'address':$4" +
-            ", 'phone_number':$5, 'gender':$6, 'type':'employee', 'employee_id':$1})")
-    Employee createNewEmployee(String id, String firstName, String lastName, String address, String phoneNumber,
-                               String gender);
+    @Query("INSERT INTO #{#n1ql.bucket} (KEY, VALUE) VALUES ($1, $2)")
+    Employee createNewEmployee(String id, JsonObject document);
 
     @Query("DELETE FROM #{#n1ql.bucket} where type = 'employee' AND employee_id = $1 RETURNING META().id")
     void removeEmployeeById(String id);
