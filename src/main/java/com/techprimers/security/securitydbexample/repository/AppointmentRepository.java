@@ -27,7 +27,7 @@ public interface AppointmentRepository extends CouchbasePagingAndSortingReposito
     void removeAppointmentByAppointmentId(String appointmentId);
 
     @Query("MERGE INTO #{#n1ql.bucket} AS d USING [1] AS o ON KEY $1 " +
-            "WHEN MATCHED THEN UPDATE SET d.schedule = ARRAY_APPEND(d.schedule, $2) " +
+            "WHEN MATCHED THEN UPDATE SET d.schedule = (SELECT RAW b FROM ARRAY_APPEND(d.schedule, $2) as b ORDER BY b.start_time) " +
             "WHEN NOT MATCHED THEN INSERT $3")
     Appointment createAppointment(String KEY, JsonObject schedule, JsonObject document);
 }
