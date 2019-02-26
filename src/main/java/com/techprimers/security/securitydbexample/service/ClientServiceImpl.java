@@ -32,4 +32,11 @@ public class ClientServiceImpl implements ClientService
     {
         clientRepository.removeClient(client.getClientId());
     }
+
+    @Override
+    public void save(Client client)
+    {
+        clientRepository.save(client.getClientId(), client.getFirstName(), client.getLastName(), client.getAddress(),
+                client.getGender(), client.getPhoneNumber(), client.getAdditionalInformation());
+    }
 }

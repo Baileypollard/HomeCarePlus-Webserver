@@ -57,22 +57,30 @@ public class EmployeePage extends VerticalLayout implements View
             refreshGrid();
         });
 
+        ComboBox<String> genderComboBox = new ComboBox<String>();
+        genderComboBox.setItems("Male", "Female");
+        genderComboBox.setEmptySelectionAllowed(false);
+
         buttonLayout.addComponents(newEmployeeButton, deleteButton);
 
         employeeGrid = new Grid<>();
+        employeeGrid.getEditor().setEnabled(true);
+
         employeeGrid.setWidth("100%");
         employeeGrid.setHeight("100%");
 
         employeeGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
         employeeGrid.addColumn(Employee::getEmployeeId).setCaption("Employee Id");
-        employeeGrid.addColumn(Employee::getFirstName).setCaption("First Name");
-        employeeGrid.addColumn(Employee::getLastName).setCaption("Last Name");
-        employeeGrid.addColumn(Employee::getAddress).setCaption("Address");
-        employeeGrid.addColumn(Employee::getPhoneNumber).setCaption("Phone Number");
-        employeeGrid.addColumn(Employee::getGender).setCaption("Gender");
+        employeeGrid.addColumn(Employee::getFirstName).setCaption("First Name").setEditorComponent(new TextField(), Employee::setFirstName);
+        employeeGrid.addColumn(Employee::getLastName).setCaption("Last Name").setEditorComponent(new TextField(), Employee::setLastName);
+        employeeGrid.addColumn(Employee::getAddress).setCaption("Address").setEditorComponent(new TextField(), Employee::setAddress);
+        employeeGrid.addColumn(Employee::getPhoneNumber).setCaption("Phone Number").setEditorComponent(new TextField(), Employee::setPhoneNumber);
+        employeeGrid.addColumn(Employee::getGender).setCaption("Gender").setEditorComponent(genderComboBox, Employee::setGender);
 
         employeeGrid.setItems(employeeService.findAll());
+
+        employeeGrid.getEditor().addSaveListener(editorSaveEvent -> employeeService.save(editorSaveEvent.getBean()));
 
         addComponents(buttonLayout, employeeGrid);
         setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);

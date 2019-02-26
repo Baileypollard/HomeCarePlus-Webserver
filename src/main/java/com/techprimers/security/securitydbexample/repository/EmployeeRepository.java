@@ -22,4 +22,9 @@ public interface EmployeeRepository extends CouchbasePagingAndSortingRepository<
 
     @Query("DELETE FROM #{#n1ql.bucket} where type = 'employee' AND employee_id = $1 RETURNING META().id")
     void removeEmployeeById(String id);
+
+    @Query("UPDATE #{#n1ql.bucket} USE KEYS $1 SET first_name=$2, last_name=$3, address=$4, " +
+            "gender=$5, phone_number=$6 RETURNING META().id")
+    void save(String KEY, String firstName, String lastName, String address, String gender,
+              String phoneNumber);
 }

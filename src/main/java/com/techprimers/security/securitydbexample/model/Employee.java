@@ -40,6 +40,31 @@ public class Employee
         this.address = address;
     }
 
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public void setEmployeeId(String employeeId)
+    {
+        this.employeeId = employeeId;
+    }
+
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    public void setPhoneNumber(String phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getEmployeeId()
     {
         return employeeId;

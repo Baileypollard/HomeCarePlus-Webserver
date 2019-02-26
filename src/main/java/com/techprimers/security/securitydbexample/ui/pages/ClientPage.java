@@ -51,23 +51,28 @@ public class ClientPage extends VerticalLayout implements View
             selectedItems.forEach(clientService::removeClient);
             refreshGrid();
         });
+        ComboBox<String> genderComboBox = new ComboBox<String>();
+        genderComboBox.setItems("Male", "Female");
+        genderComboBox.setEmptySelectionAllowed(false);
 
         buttonLayout.addComponents(newClientButton, deleteButton);
 
         clientGrid = new Grid<>();
+        clientGrid.getEditor().setEnabled(true);
         clientGrid.setWidth("100%");
         clientGrid.setHeight("100%");
 
         clientGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        clientGrid.addColumn(Client::getFirstName).setCaption("First Name");
-        clientGrid.addColumn(Client::getLastName).setCaption("Last Name");
-        clientGrid.addColumn(Client::getAddress).setCaption("Address");
-        clientGrid.addColumn(Client::getPhoneNumber).setCaption("Phone Number");
-        clientGrid.addColumn(Client::getGender).setCaption("Gender");
-        clientGrid.addColumn(Client::getAdditionalInformation).setCaption("Additional Information");
+        clientGrid.addColumn(Client::getFirstName).setCaption("First Name").setEditorComponent(new TextField(), Client::setFirstName);
+        clientGrid.addColumn(Client::getLastName).setCaption("Last Name").setEditorComponent(new TextField(), Client::setLastName);
+        clientGrid.addColumn(Client::getAddress).setCaption("Address").setEditorComponent(new TextField(), Client::setAddress);
+        clientGrid.addColumn(Client::getPhoneNumber).setCaption("Phone Number").setEditorComponent(new TextField(), Client::setPhoneNumber);
+        clientGrid.addColumn(Client::getGender).setCaption("Gender").setEditorComponent(genderComboBox, Client::setGender);
+        clientGrid.addColumn(Client::getAdditionalInformation).setCaption("Additional Information").setEditorComponent(new TextField(), Client::setAdditionalInformation);
 
         clientGrid.setItems(clientService.findAll());
+        clientGrid.getEditor().addSaveListener(editorSaveEvent -> { clientService.save(editorSaveEvent.getBean()); });
 
         addComponents(buttonLayout, clientGrid);
         setComponentAlignment(buttonLayout, Alignment.TOP_RIGHT);

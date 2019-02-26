@@ -30,6 +30,8 @@ public class CreateClientView extends VerticalLayout
         address = new TextField("Address: ");
         gender = new ComboBox<String>("Gender");
         gender.setItems("Male", "Female");
+        gender.setEmptySelectionAllowed(false);
+
         additionalInformation = new TextArea("Additional Information: ");
 
         Button createButton = new Button("Create Client");
@@ -45,7 +47,8 @@ public class CreateClientView extends VerticalLayout
             }
         });
 
-        layout.addComponents(firstName, lastName, address, phoneNumber, gender, additionalInformation, createButton);
+        layout.addComponents(firstName, lastName, address, phoneNumber, gender,
+                additionalInformation, createButton);
         addComponent(layout);
 
         setComponentAlignment(layout, Alignment.TOP_CENTER);

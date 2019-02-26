@@ -59,17 +59,17 @@ public class AppointmentPage extends VerticalLayout implements View
 
         appointmentGrid = new Grid<>();
         appointmentGrid.setSizeFull();
-
+        appointmentGrid.recalculateColumnWidths();
         appointmentGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-        appointmentGrid.addColumn(Appointment::getEmployeeId).setCaption("Employee").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getFirstName).setCaption("First Name").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getLastName).setCaption("Last Name").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getAddress).setCaption("Address").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getStartTime).setCaption("Start Time").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getEndTime).setCaption("End Time").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getDate).setCaption("Date").setWidthUndefined();
-        appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment").setWidthUndefined();
+        appointmentGrid.addColumn(Appointment::getEmployeeId).setCaption("Employee");
+        appointmentGrid.addColumn(Appointment::getFirstName).setCaption("First Name");
+        appointmentGrid.addColumn(Appointment::getLastName).setCaption("Last Name");
+        appointmentGrid.addColumn(Appointment::getAddress).setCaption("Address");
+        appointmentGrid.addColumn(Appointment::getStartTime).setCaption("Start Time");
+        appointmentGrid.addColumn(Appointment::getEndTime).setCaption("End Time");
+        appointmentGrid.addColumn(Appointment::getDate).setCaption("Date");
+        appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment");
 
         appointmentGrid.setItems(appointmentService.findAll());
 

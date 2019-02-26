@@ -23,7 +23,6 @@ public class EmployeeServiceImpl implements EmployeeService
     @Override
     public Employee createNewEmployee(Employee employee)
     {
-
         return employeeRepository.createNewEmployee(employee.getEmployeeId(), DocumentCreator.createEmployeeDocument(employee));
     }
 
@@ -31,5 +30,12 @@ public class EmployeeServiceImpl implements EmployeeService
     public void removeEmployee(Employee employee)
     {
         employeeRepository.removeEmployeeById(employee.getEmployeeId());
+    }
+
+    @Override
+    public void save(Employee employee)
+    {
+        employeeRepository.save(employee.getEmployeeId(), employee.getFirstName(), employee.getLastName(),
+                employee.getAddress(), employee.getGender(), employee.getPhoneNumber());
     }
 }

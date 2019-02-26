@@ -7,10 +7,12 @@ import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.techprimers.security.securitydbexample.ui.pages.AppointmentPage;
 import com.techprimers.security.securitydbexample.ui.pages.ClientPage;
 import com.techprimers.security.securitydbexample.ui.pages.EmployeePage;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -55,15 +57,11 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
                 .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
                 .build();
 
-        AppointmentPage appointmentPage =  new AppointmentPage(employeeService, clientService, appointmentService);
-        ClientPage clientPage =  new ClientPage(clientService);
-        EmployeePage employeePage = new EmployeePage(userDetailsService, employeeService);
-
         navigator = new Navigator(this, hybridMenu.getNaviContent());
 
-        navigator.addView("Appointments", appointmentPage);
-        navigator.addView("Clients", clientPage);
-        navigator.addView("Employees", employeePage);
+        navigator.addView("Appointments", new AppointmentPage(employeeService, clientService, appointmentService));
+        navigator.addView("Clients", new ClientPage(clientService));
+        navigator.addView("Employees",new EmployeePage(userDetailsService, employeeService));
         navigator.navigateTo("Appointments");
 
         buildTopMenu();
@@ -88,11 +86,9 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     @Override
     public void detach(DetachEvent detachEvent)
     {
-        System.out.println("Detached");
         super.detach();
         getUI().detach();
     }
-
 
     private void buildTopMenu()
     {

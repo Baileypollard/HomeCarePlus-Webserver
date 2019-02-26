@@ -11,4 +11,6 @@ public interface ClientService
 
     void removeClient(Client client);
 
+    void save(Client client);
+
 }
