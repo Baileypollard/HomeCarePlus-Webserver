@@ -11,4 +11,6 @@ public interface AppointmentService
     void removeAppointmentByAppointmentId(String appointmentId);
 
     Appointment createAppointment(Appointment appointment);
+
+    void updateAppointmentStatus(Appointment appointment);
 }

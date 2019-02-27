@@ -1,10 +1,13 @@
 package com.techprimers.security.securitydbexample.model;
 
 import com.couchbase.client.java.repository.annotation.Field;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.couchbase.core.mapping.Document;
-
 import com.couchbase.client.java.repository.annotation.Id;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import java.util.Map;
 import java.util.UUID;
 
 @Document
@@ -13,38 +16,72 @@ public class Appointment
     @Id
     private String _id = UUID.randomUUID().toString();
 
+    @JsonProperty("appointment_id")
     @Field("appointment_id")
     private String appointmentId;
+
+    @JsonProperty("address")
     @Field("address")
     private String address;
+
+    @JsonProperty("comment")
     @Field("comment")
     private String comment;
+
+    @JsonProperty("end_time")
     @Field("end_time")
     private String endTime;
+
+    @JsonProperty("start_time")
     @Field("start_time")
     private String startTime;
+
+    @JsonProperty("gender")
     @Field("gender")
     private String gender;
+
+    @JsonProperty("last_name")
     @Field("last_name")
     private String lastName;
+
+    @JsonProperty("phone_number")
     @Field("phone_number")
     private String phoneNumber;
+
+    @JsonProperty("punched_in_time")
     @Field("punched_in_time")
     private String punchedInTime;
+
+    @JsonProperty("punched_out_time")
     @Field("punched_out_time")
     private String punchedOutTime;
+
+    @JsonProperty("status")
     @Field("status")
     private String status;
+
+    @JsonProperty("date")
     @Field("date")
     private String date;
+
+    @JsonProperty("employee_id")
     @Field("employee_id")
     private String employeeId;
+
+    @JsonProperty("first_name")
     @Field("first_name")
     private String firstName;
 
+    @JsonProperty("punched_in_loc")
+    @Field("punched_in_loc")
+    private Map<String, Double> punchedInLoc;
+
+    @JsonProperty("punched_out_loc")
+    @Field("punched_out_loc")
+    private Map<String, Double> punchedOutLoc;
+
     public Appointment()
     {
-
     }
 
     public Appointment(String firstName, String appointmentId, String address, String comment, String endTime, String startTime, String gender, String lastName, String phoneNumber, String punchedInTime, String punchedOutTime, String status, String date, String employeeId)
@@ -63,6 +100,16 @@ public class Appointment
         this.date = date;
         this.employeeId = employeeId;
         this.firstName = firstName;
+    }
+
+    public Map<String, Double> getPunchedOutLoc()
+    {
+        return punchedOutLoc;
+    }
+
+    public Map<String, Double> getPunchedInLoc()
+    {
+        return punchedInLoc;
     }
 
     public String getFirstName()

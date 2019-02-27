@@ -1,9 +1,18 @@
 package com.techprimers.security.securitydbexample.resource;
 
+import com.couchbase.client.java.document.json.JsonObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.DistanceMatrixApiRequest;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.*;
+import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.model.Users;
+import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.techprimers.security.securitydbexample.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -23,6 +32,9 @@ public class LoginController {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
+    private AppointmentServiceImpl appointmentService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
@@ -34,6 +46,43 @@ public class LoginController {
     {
         createCouchbaseUser(user);
         return createCouchbaseSession(user);
+    }
+
+    @PostMapping("/secured/verify")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public void verify(@RequestBody Appointment appointment)
+    {
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey("AIzaSyA0HS0GBYbxEbdXhzsP7sUnk2MDT7j3XFw")
+                .build();
+
+        try
+        {
+            GeocodingResult[] results =  GeocodingApi.geocode(context, appointment.getAddress()).await();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            JsonObject geometryObject = JsonObject.fromJson(gson.toJson(results[0].geometry));
+            JsonObject locationObj = geometryObject.getObject("location");
+
+            LatLng centerPoint = new LatLng(locationObj.getDouble("lat"), locationObj.getDouble("lng"));
+            LatLng punchedInPoint = new LatLng(appointment.getPunchedInLoc().get("lat"), appointment.getPunchedInLoc().get("lng"));
+            LatLng punchedOutPoint = new LatLng(appointment.getPunchedOutLoc().get("lat"), appointment.getPunchedOutLoc().get("lng"));
+
+            DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context);
+            DistanceMatrix trix = request.origins(punchedInPoint, punchedOutPoint).
+                    destinations(centerPoint).mode(TravelMode.DRIVING).
+                    await();
+
+            long punchedInDistanceMeters = trix.rows[0].elements[0].distance.inMeters;
+            long punchedOutDistanceMeters = trix.rows[1].elements[0].distance.inMeters;
+
+            appointment.setStatus("VERIFIED");
+            appointmentService.updateAppointmentStatus(appointment);
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Exception: " + e.getLocalizedMessage());
+        }
     }
 
     private String createCouchbaseUser(Users user)

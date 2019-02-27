@@ -33,4 +33,10 @@ public class AppointmentServiceImpl implements AppointmentService
         return appointmentRepository.createAppointment(appointment.getKey(), DocumentCreator.createAppointment(appointment),
                 DocumentCreator.createAppointmentDocument(appointment));
     }
+
+    @Override
+    public void updateAppointmentStatus(Appointment appointment)
+    {
+        appointmentRepository.updateAppointmentStatus(appointment.getAppointmentId(), appointment.getStatus());
+    }
 }
