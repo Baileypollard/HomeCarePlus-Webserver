@@ -52,10 +52,14 @@ public class LoginController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public void verify(@RequestBody Appointment appointment)
     {
+        if (appointment.getPunchedOutLoc() == null || appointment.getPunchedInLoc() == null)
+        {
+            return;
+        }
+
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyA0HS0GBYbxEbdXhzsP7sUnk2MDT7j3XFw")
                 .build();
-
         try
         {
             GeocodingResult[] results =  GeocodingApi.geocode(context, appointment.getAddress()).await();
@@ -63,21 +67,28 @@ public class LoginController {
             JsonObject geometryObject = JsonObject.fromJson(gson.toJson(results[0].geometry));
             JsonObject locationObj = geometryObject.getObject("location");
 
-            LatLng centerPoint = new LatLng(locationObj.getDouble("lat"), locationObj.getDouble("lng"));
+            LatLng addressPoint = new LatLng(locationObj.getDouble("lat"), locationObj.getDouble("lng"));
             LatLng punchedInPoint = new LatLng(appointment.getPunchedInLoc().get("lat"), appointment.getPunchedInLoc().get("lng"));
             LatLng punchedOutPoint = new LatLng(appointment.getPunchedOutLoc().get("lat"), appointment.getPunchedOutLoc().get("lng"));
 
             DistanceMatrixApiRequest request = new DistanceMatrixApiRequest(context);
             DistanceMatrix trix = request.origins(punchedInPoint, punchedOutPoint).
-                    destinations(centerPoint).mode(TravelMode.DRIVING).
+                    destinations(addressPoint).mode(TravelMode.DRIVING).
                     await();
 
             long punchedInDistanceMeters = trix.rows[0].elements[0].distance.inMeters;
             long punchedOutDistanceMeters = trix.rows[1].elements[0].distance.inMeters;
 
-            appointment.setStatus("VERIFIED");
+            //If the distance is greater than 200m, then decline the appointment, otherwise verify it
+            if (punchedInDistanceMeters > 200 || punchedOutDistanceMeters > 200)
+            {
+                appointment.setStatus("DECLINED");
+            }
+            else
+            {
+                appointment.setStatus("VERIFIED");
+            }
             appointmentService.updateAppointmentStatus(appointment);
-
         }
         catch (Exception e)
         {
