@@ -42,7 +42,9 @@ public class DocumentCreator
     public static JsonObject createAppointment(Appointment appointment)
     {
         JsonObject document = JsonObject.create();
+
         document.put("first_name", appointment.getFirstName());
+        document.put("phone_number", appointment.getPhoneNumber());
         document.put("last_name", appointment.getLastName());
         document.put("address", appointment.getAddress());
         document.put("start_time", appointment.getStartTime());

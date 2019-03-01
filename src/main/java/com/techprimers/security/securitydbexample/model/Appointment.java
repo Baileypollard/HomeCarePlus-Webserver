@@ -2,6 +2,7 @@ package com.techprimers.security.securitydbexample.model;
 
 import com.couchbase.client.java.repository.annotation.Field;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.techprimers.security.securitydbexample.utils.DateUtil;
 import org.springframework.data.couchbase.core.mapping.Document;
 import com.couchbase.client.java.repository.annotation.Id;
 
@@ -30,11 +31,11 @@ public class Appointment
 
     @JsonProperty("end_time")
     @Field("end_time")
-    private String endTime;
+    private long endTime;
 
     @JsonProperty("start_time")
     @Field("start_time")
-    private String startTime;
+    private long startTime;
 
     @JsonProperty("gender")
     @Field("gender")
@@ -84,7 +85,7 @@ public class Appointment
     {
     }
 
-    public Appointment(String firstName, String appointmentId, String address, String comment, String endTime, String startTime, String gender, String lastName, String phoneNumber, String punchedInTime, String punchedOutTime, String status, String date, String employeeId)
+    public Appointment(String firstName, String appointmentId, String address, String comment, long endTime, long startTime, String gender, String lastName, String phoneNumber, String punchedInTime, String punchedOutTime, String status, String date, String employeeId)
     {
         this.appointmentId = appointmentId;
         this.address = address;
@@ -137,12 +138,22 @@ public class Appointment
         return comment;
     }
 
-    public String getEndTime()
+    public long getEndTime()
     {
         return endTime;
     }
 
-    public String getStartTime()
+    public String getFormattedStartTime()
+    {
+        return DateUtil.convertMsToTime(startTime);
+    }
+
+    public String getFormattedEndTime()
+    {
+        return DateUtil.convertMsToTime(endTime);
+    }
+
+    public long getStartTime()
     {
         return startTime;
     }

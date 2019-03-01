@@ -9,6 +9,9 @@ import com.techprimers.security.securitydbexample.model.Employee;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -82,12 +85,16 @@ public class CreateAppointmentView extends VerticalLayout
             String firstName = selectedClient.getFirstName();
             String lastName = selectedClient.getLastName();
             String address = selectedClient.getAddress();
-            String startTime = this.startTime.getValue().format(DateTimeFormatter.ofPattern("hh:mm a"));
-            String endTime = this.endTime.getValue().format(DateTimeFormatter.ofPattern("hh:mm a"));
             String date = dateField.getValue().toString();
             String gender = selectedClient.getGender();
             String phoneNumber = selectedClient.getPhoneNumber();
             String employeeId = selectedEmployee.getEmployeeId();
+
+            long startTime = this.dateField.getValue().atTime(this.startTime.getValue().getHour(),
+                    this.startTime.getValue().getMinute()).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
+
+            long endTime = this.dateField.getValue().atTime(this.endTime.getValue().getHour(),
+                    this.endTime.getValue().getMinute()).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
 
             return new Appointment(firstName, UUID.randomUUID().toString(), address, "", endTime, startTime, gender,
                     lastName, phoneNumber, "", "", "NEW", date, employeeId);

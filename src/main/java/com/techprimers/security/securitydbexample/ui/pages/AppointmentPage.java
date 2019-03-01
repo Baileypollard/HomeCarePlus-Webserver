@@ -66,8 +66,8 @@ public class AppointmentPage extends VerticalLayout implements View
         appointmentGrid.addColumn(Appointment::getFirstName).setCaption("First Name");
         appointmentGrid.addColumn(Appointment::getLastName).setCaption("Last Name");
         appointmentGrid.addColumn(Appointment::getAddress).setCaption("Address");
-        appointmentGrid.addColumn(Appointment::getStartTime).setCaption("Start Time");
-        appointmentGrid.addColumn(Appointment::getEndTime).setCaption("End Time");
+        appointmentGrid.addColumn(Appointment::getFormattedStartTime).setCaption("Start Time");
+        appointmentGrid.addColumn(Appointment::getFormattedEndTime).setCaption("End Time");
         appointmentGrid.addColumn(Appointment::getDate).setCaption("Date");
         appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment");
 
