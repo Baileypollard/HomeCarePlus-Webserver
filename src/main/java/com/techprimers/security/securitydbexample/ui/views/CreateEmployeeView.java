@@ -52,7 +52,7 @@ public class CreateEmployeeView extends VerticalLayout
                     employeeService.createNewEmployee(employee);
                     customUserDetailsService.saveUser(new Users("testemail@gmail.com", getEncrypter().encode(password.getValue()),
                             employee.getFirstName(), employee.getLastName(), 1, employee.getPhoneNumber(), employee.getAddress(),
-                            employee.getEmployeeId(), Collections.singletonList(new Role("ROLE_ADMIN"))));
+                            employee.getEmployeeId(), new ArrayList<>()));
 
                     Collection<Window> windows = getUI().getWindows();
                     windows.forEach(Window::close);

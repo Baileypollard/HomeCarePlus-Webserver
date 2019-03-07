@@ -51,7 +51,7 @@ public class EmployeePage extends VerticalLayout implements View
             Set<Employee> selectedItems = employeeGrid.getSelectedItems();
             selectedItems.forEach(employee -> {
                         employeeService.removeEmployee(employee);
-                        customUserDetails.deleteUserById(employee.getEmployeeId());
+                        customUserDetails.deleteUserByUsername(employee.getEmployeeId());
                     }
             );
             refreshGrid();

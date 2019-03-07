@@ -17,6 +17,10 @@ public class Appointment
     @Id
     private String _id = UUID.randomUUID().toString();
 
+    @JsonProperty("client_id")
+    @Field("client_id")
+    private String clientId;
+
     @JsonProperty("appointment_id")
     @Field("appointment_id")
     private String appointmentId;
@@ -85,7 +89,10 @@ public class Appointment
     {
     }
 
-    public Appointment(String firstName, String appointmentId, String address, String comment, long endTime, long startTime, String gender, String lastName, String phoneNumber, String punchedInTime, String punchedOutTime, String status, String date, String employeeId)
+    public Appointment(String appointmentId, String firstName, String address,
+                       String comment, long endTime, long startTime, String gender,
+                       String lastName, String phoneNumber, String punchedInTime,
+                       String punchedOutTime, String status, String date, String employeeId, String clientId)
     {
         this.appointmentId = appointmentId;
         this.address = address;
@@ -101,6 +108,17 @@ public class Appointment
         this.date = date;
         this.employeeId = employeeId;
         this.firstName = firstName;
+        this.clientId = clientId;
+    }
+
+    public String getClientId()
+    {
+        return clientId;
+    }
+
+    public void setClientId(String clientId)
+    {
+        this.clientId = clientId;
     }
 
     public Map<String, Double> getPunchedOutLoc()

@@ -8,7 +8,7 @@ public class DateUtil
     public static String convertMsToTime(long ms)
     {
         Date date = new Date(ms);
-        return new SimpleDateFormat("hh:mm a").format(date);
+        return new SimpleDateFormat("h:mm a").format(date);
     }
 
 }

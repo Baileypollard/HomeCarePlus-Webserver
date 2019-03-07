@@ -1,7 +1,13 @@
 package com.techprimers.security.securitydbexample.model;
 
+import org.atmosphere.config.service.Delete;
+import org.hibernate.annotations.ManyToAny;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,7 +35,7 @@ public class Users
     @Column(name = "username")
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
@@ -159,7 +165,7 @@ public class Users
         return roles;
     }
 
-    public void setRoles(Set<Role> roles)
+    public void setRoles(Collection<Role> roles)
     {
         this.roles = roles;
     }

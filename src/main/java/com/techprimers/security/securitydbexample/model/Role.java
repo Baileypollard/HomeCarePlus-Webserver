@@ -7,11 +7,10 @@ import javax.persistence.*;
 public class Role
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id")
     private int roleId;
 
-    @Column(name = "role")
+    @Column(name = "role", unique = true)
     private String role;
 
     public Role()
@@ -19,8 +18,9 @@ public class Role
 
     }
 
-    public Role(String role)
+    public Role(int id, String role)
     {
+        this.roleId = id;
         this.role = role;
     }
 

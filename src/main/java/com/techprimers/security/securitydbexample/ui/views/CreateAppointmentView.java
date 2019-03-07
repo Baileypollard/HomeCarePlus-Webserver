@@ -6,6 +6,8 @@ import com.techprimers.security.securitydbexample.interfaces.EmployeeService;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.model.Client;
 import com.techprimers.security.securitydbexample.model.Employee;
+import com.vaadin.server.Page;
+import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -46,13 +48,13 @@ public class CreateAppointmentView extends VerticalLayout
 
         startTime = new DateTimeField("Start Time: ");
         startTime.setStyleName("time-only");
-        startTime.setDateFormat("hh:mm a");
+        startTime.setDateFormat("h:mm a");
         startTime.setLocale(Locale.CANADA);
         startTime.setWidth("-1px");
 
         endTime = new DateTimeField("End Time: ");
         endTime.setStyleName("time-only");
-        endTime.setDateFormat("hh:mm a");
+        endTime.setDateFormat("h:mm a");
         endTime.setLocale(Locale.CANADA);
         endTime.setWidth("-1px");
 
@@ -89,15 +91,17 @@ public class CreateAppointmentView extends VerticalLayout
             String gender = selectedClient.getGender();
             String phoneNumber = selectedClient.getPhoneNumber();
             String employeeId = selectedEmployee.getEmployeeId();
+            String clientId = selectedClient.getClientId();
 
+            //Convert to ms, since that is what is expected
             long startTime = this.dateField.getValue().atTime(this.startTime.getValue().getHour(),
                     this.startTime.getValue().getMinute()).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
 
             long endTime = this.dateField.getValue().atTime(this.endTime.getValue().getHour(),
                     this.endTime.getValue().getMinute()).atZone(ZoneId.systemDefault()).toEpochSecond() * 1000;
 
-            return new Appointment(firstName, UUID.randomUUID().toString(), address, "", endTime, startTime, gender,
-                    lastName, phoneNumber, "", "", "NEW", date, employeeId);
+            return new Appointment(UUID.randomUUID().toString(), firstName,  address, "", endTime, startTime, gender,
+                    lastName, phoneNumber, "", "", "NEW", date, employeeId, clientId);
         }
         catch (NoSuchElementException e)
         {

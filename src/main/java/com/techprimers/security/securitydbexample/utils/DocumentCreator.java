@@ -52,6 +52,7 @@ public class DocumentCreator
         document.put("appointment_id", appointment.getAppointmentId());
         document.put("status", appointment.getStatus());
         document.put("gender", appointment.getGender());
+        document.put("client_id", appointment.getClientId());
 
         return document;
     }
