@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
 import com.techprimers.security.securitydbexample.model.Appointment;
 import com.techprimers.security.securitydbexample.model.Users;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 @RequestMapping("/rest")
@@ -91,15 +93,15 @@ public class LoginController {
             }
             appointmentService.updateAppointmentStatus(appointment);
         }
-        catch (Exception e)
+        catch (IOException | ApiException  | InterruptedException e)
         {
-            System.out.println("Exception: " + e.getLocalizedMessage());
+            System.out.println("ERROR: " + e.getMessage());
         }
     }
 
     private String createCouchbaseUser(Users user)
     {
-        String url = "http://35.235.124.164:4985/homecareplus/_user/";
+        String url = "http://35.235.126.165:4985/homecareplus/_user/";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -137,8 +139,8 @@ public class LoginController {
 
     private String createCouchbaseSession(Users user)
     {
-        String postUrl = "http://35.235.124.164:4985/homecareplus/_session";
-        String deleteUrl = "http://35.235.124.164:4985/homecareplus/_user/" + user.getUsername() + "/_session";
+        String postUrl = "http://35.235.126.165:4985/homecareplus/_session";
+        String deleteUrl = "http://35.235.126.165:4985/homecareplus/_user/" + user.getUsername() + "/_session";
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
