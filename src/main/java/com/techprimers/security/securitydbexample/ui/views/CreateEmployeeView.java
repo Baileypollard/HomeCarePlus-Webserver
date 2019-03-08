@@ -39,6 +39,7 @@ public class CreateEmployeeView extends VerticalLayout
         address = new TextField("Address: ");
         gender = new ComboBox<>("Gender");
         gender.setItems("Male", "Female");
+        gender.setEmptySelectionAllowed(false);
 
         Button createButton = new Button("Create Employee");
         createButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
