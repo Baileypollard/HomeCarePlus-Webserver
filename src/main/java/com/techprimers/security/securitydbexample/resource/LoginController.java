@@ -101,7 +101,7 @@ public class LoginController {
 
     private String createCouchbaseUser(Users user)
     {
-        String url = "http://35.235.126.165:4985/homecareplus/_user/";
+        String url = "http://35.235.103.244:4985/homecareplus/_user/";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -139,8 +139,8 @@ public class LoginController {
 
     private String createCouchbaseSession(Users user)
     {
-        String postUrl = "http://35.235.126.165:4985/homecareplus/_session";
-        String deleteUrl = "http://35.235.126.165:4985/homecareplus/_user/" + user.getUsername() + "/_session";
+        String postUrl = "http://35.235.103.244:4985/homecareplus/_session";
+        String deleteUrl = "http://35.235.103.244:4985/homecareplus/_user/" + user.getUsername() + "/_session";
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);

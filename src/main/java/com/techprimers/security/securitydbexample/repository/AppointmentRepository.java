@@ -26,7 +26,8 @@ public interface AppointmentRepository extends CouchbasePagingAndSortingReposito
             "AND ANY v IN schedule SATISFIES v.appointment_id = $1 END RETURNING META().id as docid")
     void removeAppointmentByAppointmentId(String appointmentId);
 
-    @Query("UPDATE #{#n1ql.bucket} AS g SET d.status=$2 FOR d IN g.schedule END WHERE g.type='appointment' AND ANY d IN g.schedule " +
+
+    @Query("UPDATE #{#n1ql.bucket} AS g SET d.status=$2 FOR d IN g.schedule WHEN d.appointment_id=$1 END WHERE g.type='appointment' AND ANY d IN g.schedule " +
             "SATISFIES d.appointment_id=$1 END RETURNING META().id AS _ID, META().cas AS _CAS")
     Appointment updateAppointmentStatus(String appointmentId, String status);
 
