@@ -1,6 +1,14 @@
 package com.techprimers.security.securitydbexample.ui;
 
-import com.google.maps.GeolocationApi;
+import com.github.appreciated.app.layout.AppLayout;
+import com.github.appreciated.app.layout.behaviour.AppLayoutComponent;
+import com.github.appreciated.app.layout.behaviour.Behaviour;
+import com.github.appreciated.app.layout.builder.Section;
+import com.github.appreciated.app.layout.builder.design.AppLayoutDesign;
+import com.github.appreciated.app.layout.builder.entities.DefaultBadgeHolder;
+import com.github.appreciated.app.layout.builder.factories.DefaultSpringNavigationElementInfoProducer;
+import com.github.appreciated.app.layout.component.MenuHeader;
+import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.repository.AppointmentTypeRepository;
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
@@ -9,30 +17,28 @@ import com.techprimers.security.securitydbexample.service.EmployeeServiceImpl;
 import com.techprimers.security.securitydbexample.ui.pages.AppointmentPage;
 import com.techprimers.security.securitydbexample.ui.pages.ClientPage;
 import com.techprimers.security.securitydbexample.ui.pages.EmployeePage;
-import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.Title;
+import com.vaadin.annotations.*;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.*;
-import elemental.json.JsonArray;
-import kaesdingeling.hybridmenu.HybridMenu;
-import kaesdingeling.hybridmenu.components.*;
-import kaesdingeling.hybridmenu.data.MenuConfig;
-import kaesdingeling.hybridmenu.data.enums.ToggleMode;
-import kaesdingeling.hybridmenu.design.DesignItem;
+import com.vaadin.spring.navigator.SpringNavigator;
+import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Hashtable;
+import javax.servlet.annotation.WebServlet;
 
+
+//@Push
+@PushStateNavigation
 @SpringUI(path = "/admin/panel")
+@Viewport("width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
 @Title("Admin Panel")
-@Theme("HybridMenu")
+@Theme("demo")
 public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 {
+    DefaultBadgeHolder badge = new DefaultBadgeHolder();
+
     @Autowired
     private EmployeeServiceImpl employeeService;
 
@@ -48,47 +54,26 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
-    private Navigator navigator;
-    private HybridMenu hybridMenu;
+    @Autowired
+    private SpringNavigator navigator;
 
     @Override
     protected void init(VaadinRequest vaadinRequest)
     {
-        VerticalLayout layout =  new VerticalLayout();
-
-        layout.setHeight("100%");
-        layout.setWidth("100%");
-
-        hybridMenu = HybridMenu.get()
-                .withNaviContent(layout)
-                .withConfig(MenuConfig.get().withDesignItem(DesignItem.getWhiteDesign()))
+        AppLayoutComponent component = AppLayout.getDefaultBuilder(Behaviour.LEFT_RESPONSIVE_HYBRID)
+                .withNavigator(components ->
+        {
+            navigator.init(this, components);
+            return navigator;
+        }).withNavigationElementInfoProducer(new DefaultSpringNavigationElementInfoProducer())
+                .withTitle("Homecare+").withDesign(AppLayoutDesign.MATERIAL)
+                .add("Appointments", VaadinIcons.LIST, badge, AppointmentPage.class)
+                .add("Clients", VaadinIcons.USERS, badge, ClientPage.class)
+                .add("Employees", VaadinIcons.USER, badge, EmployeePage.class)
+                .addClickable("Log out", VaadinIcons.ARROW_BACKWARD, clickEvent -> logOut())
                 .build();
 
-        navigator = new Navigator(this, hybridMenu.getNaviContent());
-
-        navigator.addView("Appointments", new AppointmentPage(employeeService,
-                clientService, appointmentService, repository));
-        navigator.addView("Clients", new ClientPage(clientService));
-        navigator.addView("Employees",new EmployeePage(userDetailsService, employeeService));
-        navigator.navigateTo("Appointments");
-
-        buildTopMenu();
-        buildLeftMenu();
-
-        setContent(hybridMenu);
-
-        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction()
-        {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public void call(JsonArray arguments)
-            {
-                detach();
-            }
-        });
-
-        Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e) { var e = e || window.event; aboutToClose(); return; };");
-
+        setContent(component);
     }
 
     @Override
@@ -98,53 +83,17 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
         getUI().detach();
     }
 
-    private void buildTopMenu()
-    {
-        TopMenu topMenu = hybridMenu.getTopMenu();
-
-        topMenu.add(HMButton.get().withClickListener(click -> navigator.navigateTo("Appointments"))
-                .withIcon(VaadinIcons.HOME)
-                .withDescription("Appointments"));
-
-        topMenu.add(HMButton.get().withClickListener(clickEvent -> logOut()))
-                .withIcon(VaadinIcons.ARROW_BACKWARD)
-                .withDescription("Log out");
-    }
-
-    private void buildLeftMenu()
-    {
-        LeftMenu leftMenu = hybridMenu.getLeftMenu();
-
-        leftMenu.setToggleMode(ToggleMode.NORMAL);
-
-        leftMenu.add(HMLabel.get()
-                .withCaption("<b>Homecare+</b> Menu")
-                .withIcon(new ThemeResource("images/app_logo.png")));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Appointments")
-                .withIcon(VaadinIcons.LIST)
-                .withClickListener(clickEvent -> navigator.navigateTo("Appointments")));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Clients")
-                .withIcon(VaadinIcons.USERS)
-                .withClickListener(clickEvent -> navigator.navigateTo("Clients")));
-
-        leftMenu.add(HMButton.get()
-                .withCaption("Employees")
-                .withIcon(VaadinIcons.USER)
-                .withClickListener(clickEvent -> navigator.navigateTo("Employees")));
-    }
-
-    public HybridMenu getHybridMenu()
-    {
-        return hybridMenu;
-    }
-
     private void logOut()
     {
         VaadinService.getCurrentRequest().getWrappedSession().invalidate();
         getUI().getPage().setLocation("/login");
+    }
+
+
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @VaadinServletConfiguration(ui = LoginUIView.class, productionMode = false)
+    public static class MyUIServlet extends VaadinServlet
+    {
+
     }
 }

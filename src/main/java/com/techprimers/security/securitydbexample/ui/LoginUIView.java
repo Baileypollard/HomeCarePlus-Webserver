@@ -14,7 +14,7 @@ import javax.servlet.annotation.WebServlet;
 
 @SpringUI(path = "/login")
 @Title("HomeCare+ Login")
-@Theme("HybridMenu")
+@Theme("demo")
 public class LoginUIView extends UI
 {
     @Autowired

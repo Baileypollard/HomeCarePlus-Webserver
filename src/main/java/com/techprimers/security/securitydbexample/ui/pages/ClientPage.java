@@ -7,12 +7,15 @@ import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayou
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Collection;
 import java.util.Set;
 
+
+@SpringView(name = "client")
 public class ClientPage extends VerticalLayout implements View
 {
     private Grid<Client> clientGrid;
@@ -21,7 +24,6 @@ public class ClientPage extends VerticalLayout implements View
     public ClientPage(ClientServiceImpl clientService)
     {
         this.clientService = clientService;
-
         setHeight("100%");
         setSpacing(true);
 
@@ -59,8 +61,7 @@ public class ClientPage extends VerticalLayout implements View
 
         clientGrid = new Grid<>();
         clientGrid.getEditor().setEnabled(true);
-        clientGrid.setWidth("100%");
-        clientGrid.setHeight("100%");
+        clientGrid.setSizeFull();
 
         clientGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 

@@ -8,12 +8,14 @@ import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayou
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Collection;
 import java.util.Set;
 
+@SpringView(name = "employee")
 public class EmployeePage extends VerticalLayout implements View
 {
     private Grid<Employee> employeeGrid;

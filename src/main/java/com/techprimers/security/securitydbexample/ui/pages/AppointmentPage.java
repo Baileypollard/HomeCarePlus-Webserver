@@ -10,12 +10,15 @@ import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayou
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.Collection;
 import java.util.Set;
 
+
+@SpringView(name = "")
 public class AppointmentPage extends VerticalLayout implements View
 {
     private AppointmentService appointmentService;
@@ -25,8 +28,7 @@ public class AppointmentPage extends VerticalLayout implements View
     {
         this.appointmentService = appointmentService;
 
-        setSizeFull();
-
+        setHeight("100%");
         setSpacing(true);
 
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -60,7 +62,7 @@ public class AppointmentPage extends VerticalLayout implements View
 
         appointmentGrid = new Grid<>();
         appointmentGrid.setSizeFull();
-        appointmentGrid.recalculateColumnWidths();
+
         appointmentGrid.setSelectionMode(Grid.SelectionMode.MULTI);
 
         appointmentGrid.addColumn(Appointment::getEmployeeId).setCaption("Employee");
