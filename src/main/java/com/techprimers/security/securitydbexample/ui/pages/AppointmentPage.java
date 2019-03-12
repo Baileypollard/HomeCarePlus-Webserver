@@ -4,6 +4,7 @@ import com.techprimers.security.securitydbexample.interfaces.AppointmentService;
 import com.techprimers.security.securitydbexample.interfaces.ClientService;
 import com.techprimers.security.securitydbexample.interfaces.EmployeeService;
 import com.techprimers.security.securitydbexample.model.Appointment;
+import com.techprimers.security.securitydbexample.repository.AppointmentTypeRepository;
 import com.techprimers.security.securitydbexample.ui.views.CreateAppointmentView;
 import com.techprimers.security.securitydbexample.ui.views.CreateWindowWithLayout;
 import com.vaadin.icons.VaadinIcons;
@@ -20,7 +21,7 @@ public class AppointmentPage extends VerticalLayout implements View
     private AppointmentService appointmentService;
     private Grid<Appointment> appointmentGrid;
 
-    public AppointmentPage(EmployeeService employeeService, ClientService clientService, AppointmentService appointmentService)
+    public AppointmentPage(EmployeeService employeeService, ClientService clientService, AppointmentService appointmentService, AppointmentTypeRepository repository)
     {
         this.appointmentService = appointmentService;
 
@@ -38,7 +39,7 @@ public class AppointmentPage extends VerticalLayout implements View
                     {
                         windows.forEach(Window::close);
                     }
-                    VerticalLayout appointmentLayout = new CreateAppointmentView(employeeService, clientService, appointmentService);
+                    VerticalLayout appointmentLayout = new CreateAppointmentView(employeeService, clientService, appointmentService, repository);
                     Window appointmentWindow = new CreateWindowWithLayout(appointmentLayout);
                     getUI().addWindow(appointmentWindow);
                     appointmentWindow.addCloseListener(closeEvent -> refreshGrid());
@@ -70,6 +71,7 @@ public class AppointmentPage extends VerticalLayout implements View
         appointmentGrid.addColumn(Appointment::getFormattedEndTime).setCaption("End Time");
         appointmentGrid.addColumn(Appointment::getDate).setCaption("Date");
         appointmentGrid.addColumn(Appointment::getComment).setCaption("Comment");
+        appointmentGrid.addColumn(Appointment::getType).setCaption("Type");
 
         appointmentGrid.setItems(appointmentService.findAll());
 

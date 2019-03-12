@@ -53,6 +53,13 @@ public class DocumentCreator
         document.put("status", appointment.getStatus());
         document.put("gender", appointment.getGender());
         document.put("client_id", appointment.getClientId());
+        document.put("description", appointment.getDescription());
+
+        JsonObject type = JsonObject.create();
+        type.put("name", appointment.getType().getName());
+        type.put("abbreviation", appointment.getType().getAbbreviation());
+
+        document.put("type", type);
 
         return document;
     }

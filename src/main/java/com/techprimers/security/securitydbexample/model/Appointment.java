@@ -1,13 +1,11 @@
 package com.techprimers.security.securitydbexample.model;
 
 import com.couchbase.client.java.repository.annotation.Field;
+import com.couchbase.client.java.repository.annotation.Id;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.techprimers.security.securitydbexample.utils.DateUtil;
 import org.springframework.data.couchbase.core.mapping.Document;
-import com.couchbase.client.java.repository.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import java.util.Map;
 import java.util.UUID;
 
@@ -85,6 +83,14 @@ public class Appointment
     @Field("punched_out_loc")
     private Map<String, Double> punchedOutLoc;
 
+    @JsonProperty("description")
+    @Field("description")
+    private String description;
+
+    @JsonProperty("type")
+    @Field("type")
+    private AppointmentType type;
+
     public Appointment()
     {
     }
@@ -92,7 +98,8 @@ public class Appointment
     public Appointment(String appointmentId, String firstName, String address,
                        String comment, long endTime, long startTime, String gender,
                        String lastName, String phoneNumber, String punchedInTime,
-                       String punchedOutTime, String status, String date, String employeeId, String clientId)
+                       String punchedOutTime, String status, String date, String employeeId, String clientId,
+                       String description, AppointmentType type)
     {
         this.appointmentId = appointmentId;
         this.address = address;
@@ -109,6 +116,13 @@ public class Appointment
         this.employeeId = employeeId;
         this.firstName = firstName;
         this.clientId = clientId;
+        this.description = description;
+        this.type = type;
+    }
+
+    public AppointmentType getType()
+    {
+        return type;
     }
 
     public String getClientId()
@@ -264,5 +278,10 @@ public class Appointment
     public String getKey()
     {
         return getEmployeeId() + "." + getDate();
+    }
+
+    public String getDescription()
+    {
+        return description.isEmpty() ? "NONE" : description;
     }
 }

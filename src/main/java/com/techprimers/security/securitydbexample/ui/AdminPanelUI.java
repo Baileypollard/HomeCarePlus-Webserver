@@ -1,6 +1,7 @@
 package com.techprimers.security.securitydbexample.ui;
 
 import com.google.maps.GeolocationApi;
+import com.techprimers.security.securitydbexample.repository.AppointmentTypeRepository;
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
 import com.techprimers.security.securitydbexample.service.ClientServiceImpl;
 import com.techprimers.security.securitydbexample.service.CustomUserDetailsService;
@@ -42,6 +43,9 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     private ClientServiceImpl clientService;
 
     @Autowired
+    private AppointmentTypeRepository repository;
+
+    @Autowired
     private CustomUserDetailsService userDetailsService;
 
     private Navigator navigator;
@@ -62,7 +66,8 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
 
         navigator = new Navigator(this, hybridMenu.getNaviContent());
 
-        navigator.addView("Appointments", new AppointmentPage(employeeService, clientService, appointmentService));
+        navigator.addView("Appointments", new AppointmentPage(employeeService,
+                clientService, appointmentService, repository));
         navigator.addView("Clients", new ClientPage(clientService));
         navigator.addView("Employees",new EmployeePage(userDetailsService, employeeService));
         navigator.navigateTo("Appointments");

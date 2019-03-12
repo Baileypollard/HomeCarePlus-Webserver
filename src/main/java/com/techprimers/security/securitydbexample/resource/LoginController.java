@@ -124,6 +124,7 @@ public class LoginController {
 
         try
         {
+            System.out.println("Creating User: " + user.getUsername());
             return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
         }
         catch (HttpClientErrorException e)
