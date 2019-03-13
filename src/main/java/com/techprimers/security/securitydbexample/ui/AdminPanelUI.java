@@ -8,6 +8,8 @@ import com.github.appreciated.app.layout.builder.design.AppLayoutDesign;
 import com.github.appreciated.app.layout.builder.entities.DefaultBadgeHolder;
 import com.github.appreciated.app.layout.builder.factories.DefaultSpringNavigationElementInfoProducer;
 import com.github.appreciated.app.layout.component.MenuHeader;
+import com.github.appreciated.app.layout.component.button.IconButton;
+import com.github.appreciated.app.layout.component.layout.VerticalFlexBoxLayout;
 import com.techprimers.security.securitydbexample.model.Employee;
 import com.techprimers.security.securitydbexample.repository.AppointmentTypeRepository;
 import com.techprimers.security.securitydbexample.service.AppointmentServiceImpl;
@@ -66,7 +68,7 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
             navigator.init(this, components);
             return navigator;
         }).withNavigationElementInfoProducer(new DefaultSpringNavigationElementInfoProducer())
-                .withTitle("Homecare+").withDesign(AppLayoutDesign.MATERIAL)
+                .withTitle("HomeCare+").withDesign(AppLayoutDesign.MATERIAL)
                 .add("Appointments", VaadinIcons.LIST, badge, AppointmentPage.class)
                 .add("Clients", VaadinIcons.USERS, badge, ClientPage.class)
                 .add("Employees", VaadinIcons.USER, badge, EmployeePage.class)
