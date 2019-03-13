@@ -44,7 +44,7 @@ public class LoginController {
 
     @PostMapping("/secured/login")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public String login(@RequestBody Users user)
+    public ResponseEntity<String> login(@RequestBody Users user)
     {
         createCouchbaseUser(user);
         return createCouchbaseSession(user);
@@ -99,7 +99,7 @@ public class LoginController {
         }
     }
 
-    private String createCouchbaseUser(Users user)
+    private void createCouchbaseUser(Users user)
     {
         String url = "http://35.235.103.244:4985/homecareplus/_user/";
 
@@ -119,26 +119,21 @@ public class LoginController {
 
         mainNode.putPOJO("admin_channels", arrayNode);
 
-
         HttpEntity<?> entity = new HttpEntity<>(mainNode, headers);
+
+        System.out.println("Creating User: " + user.getUsername());
 
         try
         {
-            System.out.println("Creating User: " + user.getUsername());
-            return restTemplate.exchange(url, HttpMethod.POST, entity, String.class).getBody();
+            restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
         }
-        catch (HttpClientErrorException e)
+        catch (Exception e)
         {
-            if (e.getStatusCode().equals(HttpStatus.CONFLICT))
-            {
-                System.out.println("User already exists...");
-                return "User already exists...";
-            }
+
         }
-        return null;
     }
 
-    private String createCouchbaseSession(Users user)
+    private ResponseEntity<String> createCouchbaseSession(Users user)
     {
         String postUrl = "http://35.235.103.244:4985/homecareplus/_session";
         String deleteUrl = "http://35.235.103.244:4985/homecareplus/_user/" + user.getUsername() + "/_session";
@@ -154,7 +149,7 @@ public class LoginController {
         //Delete all current
         restTemplate.exchange(deleteUrl, HttpMethod.DELETE, null, String.class);
 
-        return restTemplate.exchange(postUrl, HttpMethod.POST, entity, String.class).getBody();
+        return restTemplate.exchange(postUrl, HttpMethod.POST, entity, String.class);
     }
 
     @PostMapping(value = "/register")
