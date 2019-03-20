@@ -18,6 +18,9 @@ public class DocumentCreator
         document.put("gender", client.getGender());
         document.put("client_id", client.getClientId());
         document.put("additional_information", client.getAdditionalInformation());
+        document.put("health_card_number", client.getHealthCardNumber());
+        document.put("emergency_contact_name", client.getEmergencyContactName());
+        document.put("emergency_phone_number", client.getEmergencyContactPhoneNumber());
         document.put("type", "client");
 
 

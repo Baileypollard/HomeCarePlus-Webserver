@@ -1,17 +1,19 @@
 package com.techprimers.security.securitydbexample.ui.views;
 
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 public class CreateWindowWithLayout extends Window
 {
-    private VerticalLayout layout;
+    private HorizontalLayout layout;
 
-    public CreateWindowWithLayout(VerticalLayout layout)
+    public CreateWindowWithLayout(HorizontalLayout layout)
     {
         super(layout.getCaption());
         this.layout = layout;
         this.layout.setSizeFull();
+        this.layout.setMargin(true);
         setContent(layout);
         getContent().setSizeUndefined();
         center();

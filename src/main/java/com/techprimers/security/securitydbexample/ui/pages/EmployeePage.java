@@ -38,7 +38,7 @@ public class EmployeePage extends VerticalLayout implements View
                     {
                         windows.forEach(Window::close);
                     }
-                    VerticalLayout employeeLayout = new CreateEmployeeView(customUserDetails, employeeService);
+                    HorizontalLayout employeeLayout = new CreateEmployeeView(customUserDetails, employeeService);
                     Window window = new CreateWindowWithLayout(employeeLayout);
                     getUI().addWindow(window);
                     window.addCloseListener(closeEvent -> refreshGrid());

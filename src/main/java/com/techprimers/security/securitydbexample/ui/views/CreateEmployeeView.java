@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class CreateEmployeeView extends VerticalLayout
+public class CreateEmployeeView extends HorizontalLayout
 {
     private TextField userName;
     private PasswordField password;

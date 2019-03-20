@@ -41,7 +41,7 @@ public class AppointmentPage extends VerticalLayout implements View
                     {
                         windows.forEach(Window::close);
                     }
-                    VerticalLayout appointmentLayout = new CreateAppointmentView(employeeService, clientService, appointmentService, repository);
+                    HorizontalLayout appointmentLayout = new CreateAppointmentView(employeeService, clientService, appointmentService, repository);
                     Window appointmentWindow = new CreateWindowWithLayout(appointmentLayout);
                     getUI().addWindow(appointmentWindow);
                     appointmentWindow.addCloseListener(closeEvent -> refreshGrid());

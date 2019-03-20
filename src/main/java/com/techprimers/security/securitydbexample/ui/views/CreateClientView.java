@@ -7,12 +7,17 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.*;
 
-public class CreateClientView extends VerticalLayout
+public class CreateClientView extends HorizontalLayout
 {
     private TextField firstName;
     private TextField lastName;
     private TextField phoneNumber;
     private TextField address;
+    private TextField healthCard;
+    private TextField emergencyContactName;
+    private TextField emergencyNumber;
+
+
     private ComboBox<String> gender;
     private TextArea additionalInformation;
 
@@ -23,7 +28,7 @@ public class CreateClientView extends VerticalLayout
         setHeight("100%");
         setSpacing(true);
 
-        FormLayout layout = new FormLayout();
+        FormLayout leftLayout = new FormLayout();
         firstName = new TextField("First Name: ");
         lastName = new TextField("Last Name: ");
         phoneNumber = new TextField("Phone Number: ");
@@ -47,11 +52,22 @@ public class CreateClientView extends VerticalLayout
             }
         });
 
-        layout.addComponents(firstName, lastName, address, phoneNumber, gender,
+        leftLayout.addComponents(firstName, lastName, address, phoneNumber, gender,
                 additionalInformation, createButton);
-        addComponent(layout);
 
-        setComponentAlignment(layout, Alignment.TOP_CENTER);
+
+        FormLayout rightLayout = new FormLayout();
+
+        healthCard = new TextField("Health Card #: ");
+        emergencyContactName = new TextField("Emergency Contact Name: ");
+        emergencyNumber = new TextField("Emergency Phone #: ");
+
+
+        rightLayout.addComponents(healthCard, emergencyContactName, emergencyNumber);
+
+        addComponents(leftLayout, rightLayout); //Main horizontal Layout
+
+        setComponentAlignment(leftLayout, Alignment.MIDDLE_LEFT);
     }
 
     private Client createNewClient()
@@ -64,7 +80,14 @@ public class CreateClientView extends VerticalLayout
             String phoneNumber = this.phoneNumber.getValue();
             String gender = this.gender.getValue();
             String additionalInfo = this.additionalInformation.getValue();
-            return new Client(UUID.randomUUID().toString(), firstName, lastName, address, gender, phoneNumber, additionalInfo);
+            String healthCardNumber = this.healthCard.getValue();
+            String emergencyContactName = this.emergencyContactName.getValue();
+            String emergencyContactPhone = this.emergencyNumber.getValue();
+
+            return new Client(UUID.randomUUID().toString(), firstName,
+                    lastName, address, gender, phoneNumber, additionalInfo,
+                    healthCardNumber, emergencyContactName,
+                    emergencyContactPhone);
         }
         catch (NoSuchElementException e)
         {

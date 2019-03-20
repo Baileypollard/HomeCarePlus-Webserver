@@ -29,16 +29,28 @@ public class Client
     @Field(value = "additional_information")
     private String additionalInformation;
 
-    public Client(String clientId, String firstName, String lastName,
-                  String address, String gender, String phoneNumber, String additionalInformation)
+    @Field(value = "health_card_number")
+    private String healthCardNumber;
+
+    @Field(value = "emergency_contact_name")
+    private String emergencyContactName;
+
+    @Field(value = "emergency_phone_number")
+    private String emergencyContactPhoneNumber;
+
+
+    public Client(String clientId, String firstName, String lastName, String address, String gender, String phoneNumber, String additionalInformation, String healthCardNumber, String emergencyContactName, String emergencyContactPhoneNumber)
     {
         this.clientId = clientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.gender = gender;
-        this.additionalInformation = additionalInformation;
         this.phoneNumber = phoneNumber;
+        this.additionalInformation = additionalInformation;
+        this.healthCardNumber = healthCardNumber;
+        this.emergencyContactName = emergencyContactName;
+        this.emergencyContactPhoneNumber = emergencyContactPhoneNumber;
     }
 
     public void setClientId(String clientId)
@@ -64,6 +76,21 @@ public class Client
     public void setAdditionalInformation(String additionalInformation)
     {
         this.additionalInformation = additionalInformation;
+    }
+
+    public String getHealthCardNumber()
+    {
+        return healthCardNumber;
+    }
+
+    public String getEmergencyContactName()
+    {
+        return emergencyContactName;
+    }
+
+    public String getEmergencyContactPhoneNumber()
+    {
+        return emergencyContactPhoneNumber;
     }
 
     public String getAdditionalInformation()

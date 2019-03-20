@@ -19,7 +19,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class CreateAppointmentView extends VerticalLayout
+public class CreateAppointmentView extends HorizontalLayout
 {
     private ComboBox<Client> clientsCB;
     private ComboBox<AppointmentType> appointmentTypeComboBox;
