@@ -20,7 +20,6 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -56,7 +55,6 @@ public class LoginController {
     {
         if (appointment.getPunchedOutLoc() == null || appointment.getPunchedInLoc() == null)
         {
-            System.out.println("ERROR, NULL");
             return;
         }
 

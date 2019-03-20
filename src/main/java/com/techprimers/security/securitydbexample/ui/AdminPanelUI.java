@@ -25,13 +25,12 @@ import com.vaadin.navigator.PushStateNavigation;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringNavigator;
+import com.vaadin.spring.server.SpringVaadinServlet;
 import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.annotation.WebServlet;
 
-
-//@Push
 @PushStateNavigation
 @SpringUI(path = "/admin/panel")
 @Viewport("width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
@@ -88,13 +87,13 @@ public class AdminPanelUI extends UI implements ClientConnector.DetachListener
     private void logOut()
     {
         VaadinService.getCurrentRequest().getWrappedSession().invalidate();
-        getUI().getPage().setLocation("/login");
+        getUI().getPage().setLocation("login/");
     }
 
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = LoginUIView.class, productionMode = false)
-    public static class MyUIServlet extends VaadinServlet
+    @VaadinServletConfiguration(ui = AdminPanelUI.class, productionMode = false)
+    public static class MyUIServlet extends SpringVaadinServlet
     {
 
     }
