@@ -1,2 +1,1 @@
-web: java -jar target/HomeCarePlus.jar
-
+web: java $JAVA_OPTS -jar target/*.war
