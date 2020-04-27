@@ -165,7 +165,7 @@
 				<configuration>
 					<appName>homecare-plus</appName>
 					<processTypes>
-						<web>java $JAVA_OPTS -jar target/spring-boot-1.4.7.RELEASE.jar --server.port=$PORT</web>
+						<web>java $JAVA_OPTS -cp target/classes:target/dependency/* Main</web>
 					</processTypes>
 				</configuration>
 			</plugin>
