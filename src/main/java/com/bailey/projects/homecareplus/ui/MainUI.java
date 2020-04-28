@@ -14,7 +14,7 @@ public class MainUI extends UI
     @Override
     protected void init(VaadinRequest vaadinRequest)
     {
-        getUI().getPage().setLocation("/HomeCarePlus/admin/panel");
+        getUI().getPage().setLocation("/admin/panel");
     }
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

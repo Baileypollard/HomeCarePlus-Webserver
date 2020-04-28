@@ -40,11 +40,11 @@ public class LoginView extends LoginUI
                 if (authorityList.contains("ROLE_ADMIN"))
                 {
                     VaadinService.reinitializeSession(VaadinService.getCurrentRequest());
-                    getUI().getPage().setLocation("/HomeCarePlus/admin/panel");
+                    getUI().getPage().setLocation("/admin/panel");
                 }
                 else if (authorityList.contains("ROLE_USER"))
                 {
-                    getUI().getPage().setLocation("/HomeCarePlus/user/panel");
+                    getUI().getPage().setLocation("/user/panel");
                 }
             }
         }
