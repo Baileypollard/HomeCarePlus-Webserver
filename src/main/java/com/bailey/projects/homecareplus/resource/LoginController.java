@@ -41,14 +41,14 @@ public class LoginController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @PostMapping("/secured/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Users user)
     {
         createCouchbaseUser(user);
         return createCouchbaseSession(user);
     }
 
-    @PostMapping("/secured/verify")
+    @PostMapping("/verify")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public void verify(@RequestBody Appointment appointment)
     {
