@@ -42,7 +42,7 @@ public class LoginController {
     private ObjectMapper objectMapper;
 
     @PostMapping("/secured/login")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN', 'ADMIN_ROLE', 'ROLE_ADMIN')")
     public ResponseEntity<String> login(@RequestBody Users user)
     {
         System.out.println("Creating User: " + user.getUsername());
