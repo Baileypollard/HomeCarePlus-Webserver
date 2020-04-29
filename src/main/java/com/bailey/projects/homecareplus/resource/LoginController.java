@@ -45,6 +45,8 @@ public class LoginController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<String> login(@RequestBody Users user)
     {
+        System.out.println("Creating User: " + user.getUsername());
+
         createCouchbaseUser(user);
         return createCouchbaseSession(user);
     }
